@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: labor-record-service
+  config:
+    import: configserver:${CONFIG_SERVER:http://localhost:8888}
