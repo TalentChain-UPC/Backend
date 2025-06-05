@@ -47,7 +47,7 @@ public class EmployeeCommandServiceImpl implements EmployeeCommandService {
 
         if (!allValid)return Collections.emptyList();
 
-        var employeeList = commands.stream()
+        List<Employee> employeeList = commands.stream()
                 .map(command -> {
                     var area = Area.valueOf(command.area());
                     return new Employee(command,area);

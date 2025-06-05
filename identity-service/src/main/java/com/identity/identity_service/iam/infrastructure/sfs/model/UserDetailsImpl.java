@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter
+//@Getter
 @EqualsAndHashCode
 public class UserDetailsImpl implements UserDetails {
     private final String username;
@@ -49,5 +49,20 @@ public class UserDetailsImpl implements UserDetails {
                 user.getEmail(),
                 user.getPassword(),
                 authorities);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return "";
+    }
+
+    @Override
+    public String getUsername() {
+        return "";
     }
 }

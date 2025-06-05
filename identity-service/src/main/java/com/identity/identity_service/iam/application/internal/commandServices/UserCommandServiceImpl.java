@@ -47,7 +47,11 @@ public class UserCommandServiceImpl implements UserCommandService {
     @Override
     public List<User> handleOnApplicationReady(List<CreateManagerCommand> commands, List<Roles> roles) {
 
-        var storedRoles = new ArrayList<Role>();
+        var allExist = commands.stream().allMatch(cmd -> userRepository.findByEmail(cmd.email()).isPresent());
+
+        if (allExist)return Collections.emptyList();
+
+        List<Role> storedRoles = new ArrayList<>();
         for (Roles it : roles) {
             var role = roleRepository.findByName(it);
             if (role.isEmpty()){
@@ -60,9 +64,16 @@ public class UserCommandServiceImpl implements UserCommandService {
             return Collections.emptyList();
         }
 
-        return commands.stream().map(command -> {
-            return new User(command.email(),hashingService.encode(command.password()),storedRoles,true,null);
-        }).collect(Collectors.toList());
+        List<User> userList =  commands.stream()
+                .map(command -> new User(
+                        command.email(),
+                        hashingService.encode(command.password()),
+                        storedRoles,
+                        true,
+                        null))
+                .collect(Collectors.toList());
+        userRepository.saveAll(userList);
+        return userList;
     }
 
     private List<Roles> selectRole(String area){
@@ -119,7 +130,7 @@ public class UserCommandServiceImpl implements UserCommandService {
         var employeeList = externalClientService.createEmployees(commands);
         if (employeeList.isEmpty())return Collections.emptyList();
 
-        var usersList = employeeList.stream().map(employee -> this.createUser(employee.getContactInfo().workEmail(), employee)).collect(Collectors.toList());
+        List<User> usersList = employeeList.stream().map(employee -> this.createUser(employee.getContactInfo().workEmail(), employee)).collect(Collectors.toList());
         return userRepository.saveAll(usersList);
     }
 
