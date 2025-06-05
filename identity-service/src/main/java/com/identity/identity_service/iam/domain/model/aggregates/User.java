@@ -22,7 +22,7 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     private Boolean isActive;
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id",unique = true,nullable = false)
+    @JoinColumn(name = "employee_id",unique = true)
     private Employee employee;
 
     @ManyToMany(fetch = FetchType.EAGER)

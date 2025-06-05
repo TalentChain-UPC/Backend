@@ -25,3 +25,6 @@ authorization:
     secret: ${authorization.jwt.secret}
     expiration:
       days: ${authorization.jwt.expiration.days}
+
+managers-account:
+  temporary-pswd: ${PSWD}

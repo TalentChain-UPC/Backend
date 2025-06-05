@@ -49,7 +49,7 @@ public class BearerAuthorizationRequestFilter extends OncePerRequestFilter {
                 if(tokenService.isPasswordResetToken(token)){
                     LOGGER.info("Reset Password Token detected");
 
-                    if(request.getRequestURI().startsWith("/v1/api/auth/reset-password")){
+                    if(request.getRequestURI().startsWith("/api/v1/auth/reset-password")){
                         if(tokenService.validateResetPasswordToken(token)){
                             LOGGER.info("Reset Password Token is valid");
                             request.setAttribute("resetPasswordUsername", tokenService.getUsernameFromToken(token));

@@ -5,6 +5,7 @@ import com.identity.identity_service.iam.application.internal.outboundservices.a
 import com.identity.identity_service.iam.application.internal.outboundservices.hashing.HashingService;
 import com.identity.identity_service.iam.application.internal.outboundservices.tokens.TokenService;
 import com.identity.identity_service.iam.domain.model.aggregates.User;
+import com.identity.identity_service.iam.domain.model.commands.CreateManagerCommand;
 import com.identity.identity_service.iam.domain.model.commands.SignInCommand;
 import com.identity.identity_service.iam.domain.model.commands.SignUpEmployeeCommand;
 import com.identity.identity_service.iam.domain.model.entities.Role;
@@ -41,6 +42,27 @@ public class UserCommandServiceImpl implements UserCommandService {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.externalClientService = externalClientService;
+    }
+
+    @Override
+    public List<User> handleOnApplicationReady(List<CreateManagerCommand> commands, List<Roles> roles) {
+
+        var storedRoles = new ArrayList<Role>();
+        for (Roles it : roles) {
+            var role = roleRepository.findByName(it);
+            if (role.isEmpty()){
+                break;
+            }
+            storedRoles.add(role.get());
+        }
+
+        if (storedRoles.isEmpty()){
+            return Collections.emptyList();
+        }
+
+        return commands.stream().map(command -> {
+            return new User(command.email(),hashingService.encode(command.password()),storedRoles,true,null);
+        }).collect(Collectors.toList());
     }
 
     private List<Roles> selectRole(String area){
