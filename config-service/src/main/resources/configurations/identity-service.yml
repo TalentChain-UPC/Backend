@@ -5,6 +5,11 @@ spring:
   application:
     name: identity-service
 
+authorization:
+  jwt:
+    secret: WriteHereYourSecretStringForTokenSigningCredentials
+    expiration:
+      days: 14
 
 eureka:
   instance:
