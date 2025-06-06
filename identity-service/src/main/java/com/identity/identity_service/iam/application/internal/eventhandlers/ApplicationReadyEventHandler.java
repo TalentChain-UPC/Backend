@@ -45,6 +45,6 @@ public class ApplicationReadyEventHandler {
                 new CreateManagerCommand("brayan@skillLedger.com",temporaryPassword,true,null)
         );
         var managers = userCommandService.handleOnApplicationReady(commands, List.of(Roles.ROLE_MANAGER));
-        LOGGER.info("Managers Seeding Completed: {} managers created successfully", managers.size());
+        LOGGER.info("Managers Seeding Completed");
     }
 }

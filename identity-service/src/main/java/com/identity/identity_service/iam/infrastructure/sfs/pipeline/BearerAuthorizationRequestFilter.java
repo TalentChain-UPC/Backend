@@ -65,7 +65,7 @@ public class BearerAuthorizationRequestFilter extends OncePerRequestFilter {
                         return;
                     }
 
-                } else if (tokenService.validateToken(token) && !request.getRequestURI().startsWith("/v1/api/auth/reset-password")) {
+                } else if (tokenService.validateToken(token) && !request.getRequestURI().startsWith("/api/v1/auth/reset-password")) {
                     String username = tokenService.getUsernameFromToken(token);
                     var userDetails = userDetailsService.loadUserByUsername(username);
                     SecurityContextHolder.getContext().setAuthentication(UsernamePasswordAuthenticationTokenBuilder.build(userDetails, request));

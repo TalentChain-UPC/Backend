@@ -4,6 +4,9 @@ import com.identity.identity_service.clients.domain.model.aggregates.Employee;
 import com.identity.identity_service.iam.application.internal.outboundservices.acl.ExternalClientService;
 import com.identity.identity_service.iam.application.internal.outboundservices.hashing.HashingService;
 import com.identity.identity_service.iam.application.internal.outboundservices.tokens.TokenService;
+import com.identity.identity_service.iam.domain.exceptions.IncorrectPasswordException;
+import com.identity.identity_service.iam.domain.exceptions.UserAlreadyExistsException;
+import com.identity.identity_service.iam.domain.exceptions.UserNotFoundException;
 import com.identity.identity_service.iam.domain.model.aggregates.User;
 import com.identity.identity_service.iam.domain.model.commands.CreateManagerCommand;
 import com.identity.identity_service.iam.domain.model.commands.SignInCommand;
@@ -86,10 +89,9 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     private User createUser(String email, Employee employee) {
-
-        /*userRepository.findByEmail(email).ifPresent(user -> {
+        userRepository.findByEmail(email).ifPresent(user->{
             throw new UserAlreadyExistsException("User already exists");
-        });*/
+        });
 
         var roles = selectRole(employee.getArea().name());
         var storedRoles = new ArrayList<Role>();
@@ -110,8 +112,6 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     @Override
     public Optional<User> handle(SignUpEmployeeCommand command) {
-
-        //external service de empleado para crear y devolver objeto Employee
         var employee = externalClientService.createEmployee(
                 command.name(), command.lastName(), command.age(), command.dni(),
                 command.gender(), command.location(), command.phoneNumber(), command.workEmail(),
@@ -137,8 +137,10 @@ public class UserCommandServiceImpl implements UserCommandService {
     @Override
     public Optional<ImmutablePair<User, String>> handle(SignInCommand command) {
         var user = userRepository.findByEmail(command.email());
-        if (user.isEmpty())return Optional.empty();
-        if (!hashingService.matches(command.password(),user.get().getPassword()))return Optional.empty();
+        if (user.isEmpty())throw new UserNotFoundException("User not found");
+        if (!hashingService.matches(command.password(),user.get().getPassword())){
+            throw new IncorrectPasswordException("Incorrect password");
+        }
         var token = tokenService.generateToken(user.get().getEmail());
         return Optional.of(ImmutablePair.of(user.get(),token));
     }

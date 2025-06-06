@@ -102,6 +102,9 @@ public class WebSecurityConfiguration{
                                 "/swagger-ui/**",
                                 "/swagger-resources/**",
                                 "/webjars/**").permitAll()
+                        .requestMatchers(
+                                "/api/v1/users/**"
+                        ).hasAnyRole("ADMIN","MANAGER")
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authorizationRequestFilter(), UsernamePasswordAuthenticationFilter.class);

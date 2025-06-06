@@ -23,7 +23,7 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     @Column(nullable = false)
     private Boolean isActive;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id",unique = true)
     private Employee employee;
 

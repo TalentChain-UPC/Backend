@@ -8,10 +8,12 @@ import java.util.stream.Collectors;
 
 public class UserResourceFromEntityAssembler {
     public static AuthenticatedUserResource toResourceFromEntity(User user, String token){
+        String employeeId="";
+        if (user.getEmployee() == null)employeeId="-";
         return new AuthenticatedUserResource(
                 user.getId(),
                 user.getEmail(),
-                user.getEmployee().getId().toString(),
+                employeeId,
                 token,
                 user.getRoles().stream().map(Role::getName).collect(Collectors.toList())
         );

@@ -33,6 +33,9 @@ public class EmployeeCommandServiceImpl implements EmployeeCommandService {
 
     @Override
     public Optional<Employee> handle(CreateEmployeeCommand command) {
+        if(employeeRepository.findByContactInfo_WorkEmail(command.workEmail()).isPresent()){
+            return Optional.empty();
+        }
         if (!areaValid(command.area()))return Optional.empty();
         var area = Area.valueOf(command.area());
         var employee = new Employee(command,area);
@@ -42,6 +45,13 @@ public class EmployeeCommandServiceImpl implements EmployeeCommandService {
 
     @Override
     public List<Employee> handle(List<CreateEmployeeCommand> commands) {
+
+        /*
+        Falta validar si el workEmail ya existe
+        Crear los emails nuevos
+        Y mandar LOGS de aquellos que estan repetidos
+        para tomar acciones
+        */
 
         var allValid = commands.stream().allMatch(cmd -> areaValid(cmd.area()));
 
