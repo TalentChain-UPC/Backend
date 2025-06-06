@@ -82,8 +82,8 @@ public class UserCommandServiceImpl implements UserCommandService {
     private List<Roles> selectRole(String area){
         var rolesList = new ArrayList<Roles>();
         switch (area.toUpperCase()){
-            case "GENERAL_MANAGEMENT","ADMINISTRATION","HUMAN_RESOURCES","INFORMATION_TECHNOLOGY"->rolesList.addAll(List.of(Roles.ROLE_ADMIN,Roles.ROLE_CLIENT));
-            default -> rolesList.add(Roles.ROLE_CLIENT);
+            case "GENERAL_MANAGEMENT","ADMINISTRATION","HUMAN_RESOURCES","INFORMATION_TECHNOLOGY"->rolesList.addAll(List.of(Roles.ADMIN,Roles.CLIENT));
+            default -> rolesList.add(Roles.CLIENT);
         }
         return rolesList;
     }

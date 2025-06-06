@@ -4,5 +4,5 @@ import com.identity.identity_service.iam.domain.model.valueObjects.Roles;
 
 import java.util.List;
 
-public record AuthenticatedUserResource(Long id, String username, String employeeId, String token, List<Roles> roles) {
+public record AuthenticatedUserResource(Long id, String username, Long employeeId, String token, List<Roles> roles) {
 }

@@ -4,15 +4,11 @@ import com.identity.identity_service.clients.domain.model.aggregates.Employee;
 import com.identity.identity_service.iam.domain.model.entities.Role;
 import com.identity.identity_service.shared.model.aggregate.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/*@Getter
-@Setter*/
 @Entity
 public class User extends AuditableAbstractAggregateRoot<User> {
     @Column(nullable = false)
@@ -23,7 +19,7 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     @Column(nullable = false)
     private Boolean isActive;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id",unique = true)
     private Employee employee;
 
@@ -46,7 +42,6 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     }
 
     public void addRoles(List<Role> roles) {
-        System.out.println(roles.size());
         this.roles.addAll(roles);
     }
 

@@ -17,7 +17,8 @@ import java.util.UUID;
 public class Employee{
 
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Embedded
     private FullName fullName;
@@ -30,12 +31,12 @@ public class Employee{
 
     private String occupation;
 
+    @Enumerated(EnumType.STRING)
     private Area area;
 
     public Employee() {}
 
     public Employee(CreateEmployeeCommand command,Area area){
-        this.id = UUID.randomUUID();
         this.fullName=new FullName(command.name(),command.lastName());
         this.identity=new IdentityInfo(command.age(),command.dni(),command.gender(),command.location());
         this.contactInfo=new ContactInfo(command.phoneNumber(),command.workEmail(),command.personalEmail());
@@ -43,11 +44,11 @@ public class Employee{
         this.area=area;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

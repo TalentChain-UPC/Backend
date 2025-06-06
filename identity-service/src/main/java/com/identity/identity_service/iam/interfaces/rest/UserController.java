@@ -5,10 +5,8 @@ import com.identity.identity_service.iam.interfaces.rest.resources.RegisterEmplo
 import com.identity.identity_service.iam.interfaces.rest.transform.SignUpEmployeeCommandFromResourceAssembler;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +20,7 @@ public class UserController {
         this.userCommandService = userCommandService;
     }
 
-    @PostMapping("/batch")
+    @PostMapping("/create-batch")
     public ResponseEntity<String> createMultipleClients(@RequestBody List<RegisterEmployeeResource> resources){
         var commands = resources.stream()
                 .map(SignUpEmployeeCommandFromResourceAssembler::toCommandFromResource)
@@ -33,7 +31,7 @@ public class UserController {
         return ResponseEntity.ok().body(message);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<String> createClient(@RequestBody RegisterEmployeeResource resource){
         var command = SignUpEmployeeCommandFromResourceAssembler.toCommandFromResource(resource);
         var user = userCommandService.handle(command);

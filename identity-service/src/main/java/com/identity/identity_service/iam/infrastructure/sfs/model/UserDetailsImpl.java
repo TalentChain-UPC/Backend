@@ -42,7 +42,7 @@ public class UserDetailsImpl implements UserDetails {
     public static UserDetailsImpl build(User user) {
         var authorities = user.getRoles().stream()
                 .map(role -> role.getName().name())
-                .map(SimpleGrantedAuthority::new)
+                .map(role->new SimpleGrantedAuthority("ROLE_"+role))
                 .collect(Collectors.toList());
 
         return new UserDetailsImpl(
@@ -53,16 +53,16 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return "";
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return username;
     }
 }
