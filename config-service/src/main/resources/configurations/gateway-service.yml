@@ -44,6 +44,12 @@ spring:
                 - Path=/api/v1/users/**
               filters:
                 - AuthenticationFilter
+            - id: employees
+              uri: lb://identity-service
+              predicates:
+                - Path=/api/v1/employees/**
+              filters:
+                - AuthenticationFilter
 
 authorization:
   jwt:

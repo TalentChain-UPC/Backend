@@ -7,6 +7,7 @@ import com.identity.identity_service.iam.interfaces.rest.resources.RegisterEmplo
 import com.identity.identity_service.iam.interfaces.rest.resources.UserResource;
 import com.identity.identity_service.iam.interfaces.rest.transform.SignUpEmployeeCommandFromResourceAssembler;
 import com.identity.identity_service.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import com.identity.identity_service.shared.interfaces.rest.resource.MessageResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,23 +30,23 @@ public class UserController {
     }
 
     @PostMapping("/create-batch")
-    public ResponseEntity<String> createMultipleClients(@RequestBody List<RegisterEmployeeResource> resources){
+    public ResponseEntity<MessageResource> createMultipleClients(@RequestBody List<RegisterEmployeeResource> resources){
         var commands = resources.stream()
                 .map(SignUpEmployeeCommandFromResourceAssembler::toCommandFromResource)
                 .collect(Collectors.toList());
         var users = userCommandService.handle(commands);
         if(users.isEmpty())return ResponseEntity.badRequest().build();
         var message = "Se registraron "+users.size()+" empleados exitosamente";
-        return ResponseEntity.ok().body(message);
+        return ResponseEntity.ok(new MessageResource(message));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createClient(@RequestBody RegisterEmployeeResource resource){
+    public ResponseEntity<MessageResource> createClient(@RequestBody RegisterEmployeeResource resource){
         var command = SignUpEmployeeCommandFromResourceAssembler.toCommandFromResource(resource);
         var user = userCommandService.handle(command);
         if(user.isEmpty())return ResponseEntity.badRequest().build();
         var message = "Se registró un nuevo empleado";
-        return ResponseEntity.ok().body(message);
+        return ResponseEntity.ok(new MessageResource(message));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
