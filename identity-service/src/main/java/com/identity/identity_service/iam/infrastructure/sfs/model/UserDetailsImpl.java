@@ -24,7 +24,15 @@ public class UserDetailsImpl implements UserDetails {
     private final boolean enabled;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    // Add later
+    // private final Long companyId;
+
+    public UserDetailsImpl(
+            String username,
+            String password,
+            Collection<? extends GrantedAuthority> authorities
+            //Long companyId
+    ) {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
@@ -32,6 +40,8 @@ public class UserDetailsImpl implements UserDetails {
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
+
+        //this.companyId = companyId;
     }
 
     /**
@@ -48,7 +58,9 @@ public class UserDetailsImpl implements UserDetails {
         return new UserDetailsImpl(
                 user.getEmail(),
                 user.getPassword(),
-                authorities);
+                authorities
+                //user.companyId
+        );
     }
 
     @Override

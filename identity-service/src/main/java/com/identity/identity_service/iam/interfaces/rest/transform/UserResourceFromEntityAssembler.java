@@ -2,24 +2,24 @@ package com.identity.identity_service.iam.interfaces.rest.transform;
 
 import com.identity.identity_service.iam.domain.model.aggregates.User;
 import com.identity.identity_service.iam.domain.model.entities.Role;
-import com.identity.identity_service.iam.interfaces.rest.resources.AuthenticatedUserResource;
+import com.identity.identity_service.iam.interfaces.rest.resources.UserResource;
 
 import java.util.stream.Collectors;
 
 public class UserResourceFromEntityAssembler {
-    public static AuthenticatedUserResource toResourceFromEntity(User user, String token){
+    public static UserResource toResourceFromEntity(User entity){
         Long employeeId=0L;
-        if (user.getEmployee() == null){
+        if (entity.getEmployee() == null){
             employeeId=0L;
         }else {
-            employeeId = user.getEmployee().getId();
+            employeeId = entity.getEmployee().getId();
         }
-        return new AuthenticatedUserResource(
-                user.getId(),
-                user.getEmail(),
+        return new UserResource(
+                entity.getId(),
+                entity.getEmail(),
                 employeeId,
-                token,
-                user.getRoles().stream().map(Role::getName).collect(Collectors.toList())
+                entity.getActive(),
+                entity.getRoles().stream().map(Role::getName).collect(Collectors.toList())
         );
     }
 }

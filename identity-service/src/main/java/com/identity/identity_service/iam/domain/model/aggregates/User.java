@@ -23,6 +23,8 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     @JoinColumn(name = "employee_id",unique = true)
     private Employee employee;
 
+    // private Long companyId
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",

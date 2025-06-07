@@ -4,7 +4,7 @@ import com.identity.identity_service.iam.domain.services.UserCommandService;
 import com.identity.identity_service.iam.interfaces.rest.resources.AuthenticatedUserResource;
 import com.identity.identity_service.iam.interfaces.rest.resources.SignInResource;
 import com.identity.identity_service.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
-import com.identity.identity_service.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import com.identity.identity_service.iam.interfaces.rest.transform.AuthenticatedUserResourceFromEntityAssembler;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +26,7 @@ public class AuthenticationController {
         var command = SignInCommandFromResourceAssembler.toCommandFromResource(resource);
         var authenticatedUser = userCommandService.handle(command);
         if (authenticatedUser.isEmpty())return ResponseEntity.notFound().build();
-        var authenticatedUserResource = UserResourceFromEntityAssembler
+        var authenticatedUserResource = AuthenticatedUserResourceFromEntityAssembler
                 .toResourceFromEntity(authenticatedUser.get().getLeft(), authenticatedUser.get().getRight());
         return ResponseEntity.ok(authenticatedUserResource);
     }
