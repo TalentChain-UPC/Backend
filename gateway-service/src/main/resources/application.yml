@@ -3,3 +3,9 @@ spring:
     name: gateway-service
   config:
     import: configserver:${CONFIG_SERVER:http://localhost:8888}
+
+authorization:
+  jwt:
+    secret: ${authorization.jwt.secret}
+    expiration:
+      days: ${authorization.jwt.expiration.days}
