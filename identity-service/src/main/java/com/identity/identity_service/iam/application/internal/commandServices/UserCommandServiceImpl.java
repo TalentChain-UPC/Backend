@@ -19,11 +19,10 @@ import com.identity.identity_service.iam.infrastructure.persistence.jpa.reposito
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.identity.identity_service.iam.domain.model.valueObjects.AdminOccupationRules.ADMIN_OCCUPATIONS_BY_AREA;
 
 @Service
 public class UserCommandServiceImpl implements UserCommandService {
@@ -33,6 +32,10 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final ExternalClientService externalClientService;
+
+    private static final Set<String> itAdminOccupations = Set.of(
+            "soporte tecnico","administrador de sistemas", "soporte", "mesa de ayuda", "help desk"
+    );
 
     public UserCommandServiceImpl(
             TokenService tokenService,
@@ -79,12 +82,18 @@ public class UserCommandServiceImpl implements UserCommandService {
         return userList;
     }
 
-    private List<Roles> selectRole(String area){
+    private List<Roles> selectRole(String area, String occupation){
         var rolesList = new ArrayList<Roles>();
-        switch (area.toUpperCase()){
-            case "GENERAL_MANAGEMENT","ADMINISTRATION","HUMAN_RESOURCES","INFORMATION_TECHNOLOGY"->rolesList.addAll(List.of(Roles.ADMIN,Roles.CLIENT));
-            default -> rolesList.add(Roles.CLIENT);
+
+        String normalizedArea = area.toUpperCase();
+        String normalizedOccupation = occupation.toLowerCase().trim();
+
+        if(ADMIN_OCCUPATIONS_BY_AREA.getOrDefault(normalizedArea, Set.of()).contains(normalizedOccupation)){
+            rolesList.addAll(List.of(Roles.ADMIN,Roles.CLIENT));
+        }else {
+            rolesList.add(Roles.CLIENT);
         }
+
         return rolesList;
     }
 
@@ -93,15 +102,12 @@ public class UserCommandServiceImpl implements UserCommandService {
             throw new UserAlreadyExistsException("User already exists");
         });
 
-        var roles = selectRole(employee.getArea().name());
+        var roles = selectRole(employee.getArea().name(),employee.getOccupation());
         var storedRoles = new ArrayList<Role>();
 
         for (Roles it : roles) {
             var role = roleRepository.findByName(it);
-            if (role.isEmpty()){
-                break;
-            }
-            storedRoles.add(role.get());
+            role.ifPresent(storedRoles::add);
         }
 
         String password = employee.getIdentity().dni();

@@ -34,6 +34,9 @@ public class Employee{
     @Enumerated(EnumType.STRING)
     private Area area;
 
+    // @ManyToOne()
+    // private Company companyId;
+
     public Employee() {}
 
     public Employee(CreateEmployeeCommand command,Area area){

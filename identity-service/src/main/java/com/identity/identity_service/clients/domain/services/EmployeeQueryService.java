@@ -1,5 +1,10 @@
 package com.identity.identity_service.clients.domain.services;
 
-public interface EmployeeQueryService {
+import com.identity.identity_service.clients.domain.model.aggregates.Employee;
+import com.identity.identity_service.clients.domain.model.queries.GetEmployeeByIdQuery;
 
+import java.util.Optional;
+
+public interface EmployeeQueryService {
+    Optional<Employee> handle(GetEmployeeByIdQuery query);
 }
