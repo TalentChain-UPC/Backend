@@ -9,12 +9,12 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "companies")
-@Getter
+@Table(name = "plans")
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @Setter
-public class Companies {
+public class Plans {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +23,15 @@ public class Companies {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "RUC")
-    private String RUC;
+    @Column(name = "price_per_employ", precision = 5, scale = 2)
+    private Double price_per_employ;
 
-    @Column(name = "sector")
-    private String sector;
+    @Column(name = "max_employees")
+    private Integer max_employees;
 
-    @OneToMany(mappedBy = "company")
+    @Column(name = "description")
+    private String description;
+
+    @OneToMany(mappedBy = "plan")
     private List<Company_Plans> companyPlans;
 }
