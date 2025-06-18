@@ -1,0 +1,52 @@
+services:
+  config-service:
+    build: ./config-service
+    container_name: config-service
+    ports:
+      - "8888:8888"
+    networks:
+      - tcnet
+
+  eureka-service:
+    build: ./eureka-service
+    container_name: eureka-service
+    ports:
+      - "8761:8761"
+    environment:
+      CONFIG_SERVER: ${CONFIG_SERVER}      
+    depends_on:
+      - config-service
+    networks:
+      - tcnet
+
+  #gateway-service:
+    #build: ./gateway-service
+    #container_name: gateway-service
+    #ports:
+      #- "8080:8080"
+    #networks:
+      #- tcnet
+
+  identity-service:
+    build: ./identity-service
+    container_name: identity-service
+    ports:
+      - "8100:8100"
+    environment:
+      CONFIG_SERVER: ${CONFIG_SERVER}
+      DB_URL_IDENTITY_SERVICE: ${DB_URL_IDENTITY_SERVICE}
+      DB_USERNAME_IDENTITY_SERVICE: ${DB_USERNAME_IDENTITY_SERVICE}
+      DB_PASSWORD_IDENTITY_SERVICE: ${DB_PASSWORD_IDENTITY_SERVICE}
+      PSWD: ${PSWD}
+      AUTHORIZATION_JWT_SECRET: ${AUTHORIZATION_JWT_SECRET}
+      AUTHORIZATION_JWT_EXP: ${AUTHORIZATION_JWT_EXP}
+      EUREKA_URL: ${EUREKA_URL}
+    depends_on:
+      - config-service
+      - eureka-service
+    networks:
+      - tcnet
+
+networks:
+  tcnet:
+    driver: bridge
