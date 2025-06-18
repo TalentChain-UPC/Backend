@@ -1,5 +1,15 @@
 server:
   port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL}
+      #default-zone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    hostname: gateway-service
+    #hostname: localhost
+
 spring:
   application:
     name: gateway-service
@@ -7,22 +17,56 @@ spring:
     gateway:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedHeaders: "*"
-            allowedMethods:
-              - GET
-              - POST
-              - DELETE
-              - PUT
-              - OPTIONS
-              - PATCH
-      discovery:
-        locator:
-          enabled: true
-      routes:
-        - id:
-          uri:
-          predicates:
+      server:
+        webflux:
+          globalcors:
+            corsConfigurations:
+              '[/**]':
+                allowedOrigins: "*"
+                allowedHeaders: "*"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - DELETE
+                  - PUT
+                  - OPTIONS
+                  - PATCH
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          routes:
+            - id: identity
+              uri: lb://identity-service
+              predicates:
+                - Path=/api/v1/auth/**
+            - id: users
+              uri: lb://identity-service
+              predicates:
+                - Path=/api/v1/users/**
+              filters:
+                - AuthenticationFilter
+            - id: employees
+              uri: lb://identity-service
+              predicates:
+                - Path=/api/v1/employees/**
+              filters:
+                - AuthenticationFilter
+
+authorization:
+  jwt:
+    secret: ${AUTHORIZATION_JWT_SECRET}
+    expiration:
+      days: ${AUTHORIZATION_JWT_EXP}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      access:
+        enabled: true

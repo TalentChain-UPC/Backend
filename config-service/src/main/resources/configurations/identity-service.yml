@@ -4,11 +4,35 @@ server:
 spring:
   application:
     name: identity-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL_IDENTITY_SERVICE}
+    username: ${DB_USERNAME_IDENTITY_SERVICE}
+    password: ${DB_PASSWORD_IDENTITY_SERVICE}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
+authorization:
+  jwt:
+    secret: ${AUTHORIZATION_JWT_SECRET}
+    expiration:
+      days: ${AUTHORIZATION_JWT_EXP}
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: identity-service
+    #hostname: localhost
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_URL}
+      #default-zone: ${EUREKA_URL:http://localhost:8761/eureka}
+
+
+managers-account:
+  temporary-pswd: ${PSWD}
