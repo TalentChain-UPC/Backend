@@ -19,13 +19,18 @@ services:
     networks:
       - tcnet
 
-  #gateway-service:
-    #build: ./gateway-service
-    #container_name: gateway-service
-    #ports:
-      #- "8080:8080"
-    #networks:
-      #- tcnet
+  gateway-service:
+    build: ./gateway-service
+    container_name: gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      CONFIG_SERVER: ${CONFIG_SERVER}
+      AUTHORIZATION_JWT_SECRET: ${AUTHORIZATION_JWT_SECRET}
+      AUTHORIZATION_JWT_EXP: ${AUTHORIZATION_JWT_EXP}
+      EUREKA_URL: ${EUREKA_URL}
+    networks:
+      - tcnet
 
   identity-service:
     build: ./identity-service
