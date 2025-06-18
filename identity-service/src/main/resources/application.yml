@@ -4,27 +4,3 @@ spring:
   config:
     import:
       - configserver:${CONFIG_SERVER:http://localhost:8888}
-      - env.properties
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL_IDENTITY_SERVICE}
-    username: ${DB_USERNAME_IDENTITY_SERVICE}
-    password: ${DB_PASSWORD_IDENTITY_SERVICE}
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    open-in-view: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-
-
-authorization:
-  jwt:
-    secret: ${authorization.jwt.secret}
-    expiration:
-      days: ${authorization.jwt.expiration.days}
-
-managers-account:
-  temporary-pswd: ${PSWD}
