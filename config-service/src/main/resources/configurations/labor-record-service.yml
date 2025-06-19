@@ -4,12 +4,27 @@ server:
 spring:
   application:
     name: labor-record-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL_LABOR_RECORD_SERVICE}
+    username: ${DB_USERNAME_LABOR_RECORD_SERVICE}
+    password: ${DB_PASSWORD_LABOR_RECORD_SERVICE}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
 
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: labor-record-service
+    #hostname: localhost
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_URL}
+      #defaultZone: http://localhost:8761/eureka
