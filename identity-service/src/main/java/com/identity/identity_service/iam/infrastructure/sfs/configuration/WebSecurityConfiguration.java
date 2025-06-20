@@ -104,7 +104,7 @@ public class WebSecurityConfiguration{
                                 "/webjars/**").permitAll()
                         .requestMatchers(
                                 "/api/v1/users/**"
-                        ).hasAnyRole("ADMIN","MANAGER")
+                        ).hasAnyRole("COMPANY","ADMIN")
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authorizationRequestFilter(), UsernamePasswordAuthenticationFilter.class);

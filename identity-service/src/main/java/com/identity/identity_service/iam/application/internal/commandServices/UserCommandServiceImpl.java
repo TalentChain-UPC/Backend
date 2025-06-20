@@ -89,9 +89,9 @@ public class UserCommandServiceImpl implements UserCommandService {
         String normalizedOccupation = occupation.toLowerCase().trim();
 
         if(ADMIN_OCCUPATIONS_BY_AREA.getOrDefault(normalizedArea, Set.of()).contains(normalizedOccupation)){
-            rolesList.addAll(List.of(Roles.ADMIN,Roles.CLIENT));
+            rolesList.addAll(List.of(Roles.COMPANY,Roles.EMPLOYEE));
         }else {
-            rolesList.add(Roles.CLIENT);
+            rolesList.add(Roles.EMPLOYEE);
         }
 
         return rolesList;
