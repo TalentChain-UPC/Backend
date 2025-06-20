@@ -49,7 +49,7 @@ public class UserController {
         return ResponseEntity.ok(new MessageResource(message));
     }
 
-    @PreAuthorize(value = "hasRole('MANAGER')")
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @GetMapping("/manager-view")
     public ResponseEntity<List<UserResource>> getAllUsers(){
         var users = userQueryService.handle(new GetAllUsers());
