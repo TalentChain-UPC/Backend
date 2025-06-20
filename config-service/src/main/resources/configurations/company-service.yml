@@ -1,6 +1,9 @@
+server:
+  port: 8090
+
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/TalentChainDB
+    url: jdbc:mysql://localhost:3306/talentchaindb
     username: root
     password: Upc123!
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -12,3 +15,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+eureka:
+  instance:
+    hostname: companies-service
+    #hostname: localhost
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      #default-zone: ${EUREKA_URL:http://localhost:8761/eureka}

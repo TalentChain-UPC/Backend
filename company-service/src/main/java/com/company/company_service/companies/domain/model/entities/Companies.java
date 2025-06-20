@@ -1,5 +1,7 @@
 package com.company.company_service.companies.domain.model.entities;
 
+import com.company.company_service.companies.domain.model.commands.CreateCompanyCommand;
+import com.company.company_service.shared.domain.model.aggregate.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,21 +16,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-public class Companies {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Companies extends AuditableAbstractAggregateRoot<Companies> {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "RUC")
-    private String RUC;
+    @Column(name = "ruc")
+    private String ruc;
 
     @Column(name = "sector")
     private String sector;
 
-    @OneToMany(mappedBy = "company")
-    private List<Company_Plans> companyPlans;
+    public Companies(CreateCompanyCommand command) {
+        this.name = command.name();
+        this.ruc = command.ruc();
+        this.sector = command.sector();
+    }
 }

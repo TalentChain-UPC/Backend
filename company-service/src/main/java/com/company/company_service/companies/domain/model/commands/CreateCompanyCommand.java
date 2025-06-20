@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public record CreateCompanyCommand (
         @NotBlank String name,
-        @NotBlank String RUC,
+        @NotBlank String ruc,
         @NotBlank String sector
 ) {
 }

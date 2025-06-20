@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -24,7 +25,7 @@ public class Plans {
     private String name;
 
     @Column(name = "price_per_employ", precision = 5, scale = 2)
-    private Double price_per_employ;
+    private BigDecimal price_per_employ;
 
     @Column(name = "max_employees")
     private Integer max_employees;
@@ -32,6 +33,4 @@ public class Plans {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "plan")
-    private List<Company_Plans> companyPlans;
 }
