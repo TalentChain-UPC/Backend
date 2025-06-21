@@ -1,6 +1,7 @@
 package com.identity.identity_service.clients.application.internal.queryServices;
 
 import com.identity.identity_service.clients.domain.model.aggregates.Employee;
+import com.identity.identity_service.clients.domain.model.queries.ExistsByEmployeeIdQuery;
 import com.identity.identity_service.clients.domain.model.queries.GetEmployeeByIdQuery;
 import com.identity.identity_service.clients.domain.services.EmployeeQueryService;
 import com.identity.identity_service.clients.infrastructure.persistence.jpa.repositories.EmployeeRepository;
@@ -62,5 +63,10 @@ public class EmployeeQueryServiceImpl implements EmployeeQueryService {
 
 
         return employeeRepository.findById(query.id());
+    }
+
+    @Override
+    public Boolean handle(ExistsByEmployeeIdQuery query) {
+        return employeeRepository.existsById(query.employeeId());
     }
 }
