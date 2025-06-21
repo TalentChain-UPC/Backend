@@ -52,6 +52,42 @@ services:
     networks:
       - tcnet
 
+  labor-record-service:
+    build: ./labor-record-service
+    container_name: labor-record-service
+    ports:
+      - "8105:8105"
+    environment:
+      CONFIG_SERVER: ${CONFIG_SERVER}
+      DB_URL_LABOR_RECORD_SERVICE: ${DB_URL_LABOR_RECORD_SERVICE}
+      DB_USERNAME_LABOR_RECORD_SERVICE: ${DB_USERNAME_LABOR_RECORD_SERVICE}
+      DB_PASSWORD_LABOR_RECORD_SERVICE: ${DB_PASSWORD_LABOR_RECORD_SERVICE}
+      EUREKA_URL: ${EUREKA_URL}
+    depends_on:
+      - config-service
+      - eureka-service
+      - gateway-service
+    networks:
+      - tcnet
+
+  company-service:
+    build: ./company-service
+    container_name: company-service
+    ports:
+      - "8090:8090"
+    environment:
+      CONFIG_SERVER: ${CONFIG_SERVER}
+      DB_URL_COMPANY_SERVICE: ${DB_URL_COMPANY_SERVICE}
+      DB_USERNAME_COMPANY_SERVICE: ${DB_USERNAME_COMPANY_SERVICE}
+      DB_PASSWORD_COMPANY_SERVICE: ${DB_PASSWORD_COMPANY_SERVICE}
+      EUREKA_URL: ${EUREKA_URL}
+    depends_on:
+      - config-service
+      - eureka-service
+      - gateway-service
+    networks:
+      - tcnet
+
 networks:
   tcnet:
     driver: bridge

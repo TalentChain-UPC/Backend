@@ -52,6 +52,12 @@ spring:
                 - Path=/api/v1/employees/**
               filters:
                 - AuthenticationFilter
+            - id: companies
+              uri: lb://company-service
+              predicates:
+                - Path=/api/v1/companies/**
+              filters:
+                - AuthenticationFilter
 
 authorization:
   jwt:
