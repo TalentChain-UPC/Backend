@@ -1,6 +1,7 @@
 package com.company.company_service.companies.application.internal;
 
 import com.company.company_service.companies.domain.model.commands.CreateCompanyCommand;
+import com.company.company_service.companies.domain.model.commands.DeleteCompanyCommand;
 import com.company.company_service.companies.domain.model.entities.Companies;
 import com.company.company_service.companies.domain.services.CompaniesCommandService;
 import com.company.company_service.companies.infrastructure.persistence.jpa.repositories.CompaniesRepository;
@@ -19,5 +20,15 @@ public class CompaniesCommandServiceImpl implements CompaniesCommandService {
         var companies = new Companies(command);
         companiesRepository.save(companies);
         return Optional.of(companies);
+    }
+
+    @Override
+    public Optional<Companies> handle(DeleteCompanyCommand command) {
+        var companies = companiesRepository.findById(command.id());
+        if (companies.isEmpty()) {
+            throw new IllegalArgumentException("Companies with id " + command.id() + " not found");
+        }
+        companiesRepository.delete(companies.get());
+        return companies;
     }
 }
