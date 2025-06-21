@@ -18,7 +18,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
-
+clients:
+  identity:
+    base-url: ${IDENTITY_SERVICE_URL}
 
 eureka:
   instance:
