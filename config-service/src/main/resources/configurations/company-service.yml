@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/talentchaindb
-    username: root
-    password: Upc123!
+    url: ${DB_URL_COMPANY_SERVICE}
+    username: ${DB_USERNAME_COMPANY_SERVICE}
+    password: ${DB_PASSWORD_COMPANY_SERVICE}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -18,7 +18,7 @@ spring:
 
 eureka:
   instance:
-    hostname: companies-service
+    hostname: company-service
     #hostname: localhost
   client:
     service-url:
