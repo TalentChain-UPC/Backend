@@ -4,11 +4,11 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_URL}
-      #default-zone: ${EUREKA_URL:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      #defaultZone: ${EUREKA_URL}
   instance:
-    hostname: gateway-service
-    #hostname: localhost
+    #hostname: gateway-service
+    hostname: localhost
 
 spring:
   application:
@@ -19,6 +19,10 @@ spring:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
       server:
         webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
           globalcors:
             corsConfigurations:
               '[/**]':
@@ -31,10 +35,6 @@ spring:
                   - PUT
                   - OPTIONS
                   - PATCH
-          discovery:
-            locator:
-              enabled: true
-              lower-case-service-id: true
           routes:
             - id: identity
               uri: lb://identity-service
@@ -50,6 +50,12 @@ spring:
               uri: lb://identity-service
               predicates:
                 - Path=/api/v1/employees/**
+              filters:
+                - AuthenticationFilter
+            - id: evidences
+              uri: lb://labor-record-service
+              predicates:
+                - Path=/api/v1/evidences/**
               filters:
                 - AuthenticationFilter
 
