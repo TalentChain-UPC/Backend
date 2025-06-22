@@ -8,16 +8,16 @@ public class EvidenceResourceFromEntityAssembler {
     public static EvidenceResource toResourceFromEntity(Evidence entity){
         CertificateResource certificateResource;
         if(entity.getCertificate()==null){
-            certificateResource=new CertificateResource(0L,0L,"");
+            certificateResource=new CertificateResource(0L,"");
         }else{
             certificateResource=new CertificateResource(
                     entity.getCertificate().getId(),
-                    entity.getCertificate().getEmployeeId(),
                     entity.getCertificate().getUrl());
         }
 
         return new EvidenceResource(
                 entity.getId(),
+                entity.getEmployeeId(),
                 entity.getType().name(),
                 entity.getDescription(),
                 entity.isValidated(),

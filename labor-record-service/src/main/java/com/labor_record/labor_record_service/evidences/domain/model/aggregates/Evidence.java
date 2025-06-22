@@ -9,6 +9,9 @@ import jakarta.persistence.*;
 @Entity
 public class Evidence extends AuditableAbstractAggregateRoot<Evidence> {
     @Column(nullable = false)
+    Long employeeId;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Type type;
 
@@ -26,6 +29,7 @@ public class Evidence extends AuditableAbstractAggregateRoot<Evidence> {
     private Certificate certificate;
 
     public Evidence(CreateEvidenceCommand command, Type type, Certificate certificate) {
+        this.employeeId= command.employeeId();
         this.type = type;
         this.description=command.description();
         this.validated=false;
@@ -34,6 +38,7 @@ public class Evidence extends AuditableAbstractAggregateRoot<Evidence> {
     }
 
     public Evidence(CreateEvidenceCommand command, Type type) {
+        this.employeeId= command.employeeId();
         this.type=type;
         this.description=command.description();
         this.validated=false;
@@ -42,6 +47,10 @@ public class Evidence extends AuditableAbstractAggregateRoot<Evidence> {
     }
 
     public Evidence() {
+    }
+
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
     public Certificate getCertificate() {

@@ -9,12 +9,11 @@ public class Certificate extends AuditableModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long employeeId;
+
     @Column(nullable = false,columnDefinition = "TEXT")
     private String url;
 
     public Certificate(CreateCertificateCommand command) {
-        this.employeeId=command.employeeId();
         this.url=command.url();
     }
     public Certificate() {
@@ -22,10 +21,6 @@ public class Certificate extends AuditableModel {
 
     public Long getId() {
         return id;
-    }
-
-    public Long getEmployeeId() {
-        return employeeId;
     }
 
     public String getUrl() {

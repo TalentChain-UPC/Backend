@@ -14,7 +14,7 @@ public record CreateEvidenceResource(
     ){
         this.type = type;
         this.description = description;
-        this.employeeId = (employeeId != null) ? employeeId : 0L;
+        this.employeeId = employeeId;
         this.url = (url != null) ? url : "";
     }
 }

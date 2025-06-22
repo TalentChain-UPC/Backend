@@ -2,6 +2,7 @@ package com.labor_record.labor_record_service.evidences.interfaces.rest.resource
 
 public record EvidenceResource(
         Long id,
+        Long employeeId,
         String type,
         String description,
         boolean validated,

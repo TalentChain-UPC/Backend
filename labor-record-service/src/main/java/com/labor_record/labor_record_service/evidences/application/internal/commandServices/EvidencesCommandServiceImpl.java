@@ -30,24 +30,32 @@ public class EvidencesCommandServiceImpl implements EvidenceCommandService {
     @Override
     public Optional<Evidence> handle(CreateEvidenceCommand command) {
         Type type;
-        try{
+        try {
             type = Type.valueOf(command.type());
-        }catch (Exception e){
+        } catch (Exception e) {
             return Optional.empty();
         }
-        Evidence evidence;
-        if(command.createCertificateCommand().employeeId()==0L){
-            evidence = new Evidence(command, type);
-        }else{
-            if(command.createCertificateCommand().url()=="")return Optional.empty();
-            // llamar a microservicio identity y ver si commnad.employeeId existe en la DB
-            var existsEmployee = externalProfileService.verifyIfEmployeeExists(command.createCertificateCommand().employeeId());
-            if(!existsEmployee)return Optional.empty();
-            var certificate = new Certificate(command.createCertificateCommand());
+
+        if (type.equals(Type.CERTIFICATE)) {
+            String url = command.createCertificateCommand().url();
+            if (url == null || url.isBlank()) {
+                return Optional.empty();
+            }
+
+            boolean existsEmployee = externalProfileService.verifyIfEmployeeExists(command.employeeId());
+            if (!existsEmployee) {
+                return Optional.empty();
+            }
+
+            Certificate certificate = new Certificate(command.createCertificateCommand());
             certificatesRepository.save(certificate);
-            evidence = new Evidence(command, type, certificate);
+
+            Evidence evidence = new Evidence(command, type, certificate);
+            evidencesRepository.save(evidence);
+            return Optional.of(evidence);
         }
 
+        Evidence evidence = new Evidence(command, type);
         evidencesRepository.save(evidence);
         return Optional.of(evidence);
     }
