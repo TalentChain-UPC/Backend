@@ -1,5 +1,6 @@
 package com.identity.identity_service.clients.interfaces.rest;
 
+import com.identity.identity_service.clients.domain.model.queries.ExistsByEmployeeIdQuery;
 import com.identity.identity_service.clients.domain.model.queries.GetEmployeeByIdQuery;
 import com.identity.identity_service.clients.domain.services.EmployeeQueryService;
 import com.identity.identity_service.clients.interfaces.rest.resources.EmployeeResource;
@@ -21,12 +22,19 @@ public class EmployeeController {
         this.employeeQueryService = employeeQueryService;
     }
 
-    @PreAuthorize(value = "hasAnyRole('ADMIN','MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('COMPANY','ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeResource> getEmployeeById(@PathVariable Long id){
         var employee = employeeQueryService.handle(new GetEmployeeByIdQuery(id));
         if (employee.isEmpty())return ResponseEntity.notFound().build();
         var resource = EmployeeResourceFromEntityAssembler.toResourceFromEntity(employee.get());
         return ResponseEntity.ok(resource);
+    }
+
+    @GetMapping("{id}/exists")
+    public ResponseEntity<Boolean> existsEmployeeById(@PathVariable Long id){
+        return ResponseEntity.ok(
+                employeeQueryService.handle(new ExistsByEmployeeIdQuery(id))
+        );
     }
 }
