@@ -1,5 +1,6 @@
 package com.company.company_service.companies.domain.model.entities;
 
+import com.company.company_service.companies.domain.model.commands.CreatePlanCommand;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,8 +25,8 @@ public class Plans {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "price_per_employ", precision = 5, scale = 2)
-    private BigDecimal price_per_employ;
+    @Column(name = "price_per_employ")
+    private Double price_per_employ;
 
     @Column(name = "max_employees")
     private Integer max_employees;
@@ -33,4 +34,10 @@ public class Plans {
     @Column(name = "description")
     private String description;
 
+    public Plans(CreatePlanCommand command) {
+        this.name = command.name();
+        this.price_per_employ = command.price_per_employ();
+        this.max_employees = command.max_employees();
+        this.description = command.description();
+    }
 }
