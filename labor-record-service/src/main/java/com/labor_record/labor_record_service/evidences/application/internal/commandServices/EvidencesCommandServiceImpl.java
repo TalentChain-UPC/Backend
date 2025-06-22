@@ -3,6 +3,7 @@ package com.labor_record.labor_record_service.evidences.application.internal.com
 import com.labor_record.labor_record_service.evidences.application.internal.outboundServices.acl.ExternalProfileService;
 import com.labor_record.labor_record_service.evidences.domain.model.aggregates.Evidence;
 import com.labor_record.labor_record_service.evidences.domain.model.commands.CreateEvidenceCommand;
+import com.labor_record.labor_record_service.evidences.domain.model.commands.ValidateEvidenceCommand;
 import com.labor_record.labor_record_service.evidences.domain.model.entities.Certificate;
 import com.labor_record.labor_record_service.evidences.domain.model.valueObjects.Type;
 import com.labor_record.labor_record_service.evidences.domain.services.EvidenceCommandService;
@@ -58,5 +59,14 @@ public class EvidencesCommandServiceImpl implements EvidenceCommandService {
         Evidence evidence = new Evidence(command, type);
         evidencesRepository.save(evidence);
         return Optional.of(evidence);
+    }
+
+    @Override
+    public Optional<Evidence> handle(ValidateEvidenceCommand command) {
+        var evidence = evidencesRepository.findById(command.id());
+        if(evidence.isEmpty()) return Optional.empty();
+        evidence.get().setValidated(command.validate());
+        evidencesRepository.save(evidence.get());
+        return evidence;
     }
 }
