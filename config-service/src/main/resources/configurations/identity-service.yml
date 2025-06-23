@@ -26,12 +26,12 @@ authorization:
 
 eureka:
   instance:
-    #hostname: identity-service
-    hostname: localhost
+    hostname: identity-service
+    #hostname: localhost
   client:
     service-url:
-      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
-      #defaultZone: ${EUREKA_URL}
+      defaultZone: ${EUREKA_URL}
+      #defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
 
 
 managers-account:
