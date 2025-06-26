@@ -4,8 +4,23 @@ server:
 spring:
   application:
     name: transactions-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL_TRX_SERVICE}
+    username: ${DB_USERNAME_TRX_SERVICE}
+    password: ${DB_PASSWORD_TRX_SERVICE}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
-
+clients:
+  company:
+    base-url: ${COMPANY_SERVICE_URL:http://company-service}
 
 eureka:
   instance:
