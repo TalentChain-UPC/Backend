@@ -87,6 +87,25 @@ services:
       - gateway-service
     networks:
       - tcnet
+  
+  transactions-service:
+    build: ./transactions-service
+    container_name: transactions-service
+    ports:
+      - "8120:8120"
+    environment:
+      CONFIG_SERVER: ${CONFIG_SERVER}
+      DB_URL_TRX_SERVICE: ${DB_URL_TRX_SERVICE}
+      DB_USERNAME_TRX_SERVICE: ${DB_USERNAME_TRX_SERVICE}
+      DB_PASSWORD_TRX_SERVICE: ${DB_PASSWORD_TRX_SERVICE}
+      COMPANY_SERVICE_URL: ${COMPANY_SERVICE_URL}
+      EUREKA_URL: ${EUREKA_URL}
+    depends_on:
+      - config-service
+      - eureka-service
+      - gateway-service
+    networks:
+      - tcnet
 
 networks:
   tcnet:
