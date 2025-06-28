@@ -11,6 +11,7 @@ public record EmployeeDTO (
         String workEmail,
         String personalEmail,
         String occupation,
-        String area
+        String area,
+        Long companyId
 ){
 }

@@ -1,6 +1,7 @@
 package com.identity.identity_service.iam.domain.services;
 
 import com.identity.identity_service.iam.domain.model.aggregates.User;
+import com.identity.identity_service.iam.domain.model.commands.CreateCompanyCommand;
 import com.identity.identity_service.iam.domain.model.commands.CreateManagerCommand;
 import com.identity.identity_service.iam.domain.model.commands.SignInCommand;
 import com.identity.identity_service.iam.domain.model.commands.SignUpEmployeeCommand;
@@ -11,8 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserCommandService {
-    Optional<User> handle(SignUpEmployeeCommand command);
-    List<User> handle(List<SignUpEmployeeCommand> commands);
+    Optional<User> handle(SignUpEmployeeCommand command, CreateCompanyCommand companyCommand);
+    List<User> handle(List<SignUpEmployeeCommand> commands, CreateCompanyCommand companyCommand);
     Optional<ImmutablePair<User,String>> handle(SignInCommand command);
     List<User> handleOnApplicationReady(List<CreateManagerCommand> commands, List<Roles> roles);
 }

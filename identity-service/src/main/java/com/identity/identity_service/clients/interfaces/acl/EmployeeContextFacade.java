@@ -29,11 +29,12 @@ public class EmployeeContextFacade {
             String workEmail,
             String personalEmail,
             String occupation,
-            String area
+            String area,
+            Long companyId
     ){
         return employeeCommandService.handle(new CreateEmployeeCommand(
                 name, lastName, age, dni, gender, location, phoneNumber,
-                workEmail, personalEmail, occupation, area
+                workEmail, personalEmail, occupation, area, companyId
         ));
     }
 
@@ -42,7 +43,7 @@ public class EmployeeContextFacade {
                 dto.name(), dto.lastName(), dto.age(), dto.dni(),
                 dto.gender(), dto.location(), dto.phoneNumber(),
                 dto.workEmail(), dto.personalEmail(),
-                dto.occupation(), dto.area())).collect(Collectors.toList());
+                dto.occupation(), dto.area(), dto.companyId())).collect(Collectors.toList());
         return employeeCommandService.handle(commands);
     }
 
