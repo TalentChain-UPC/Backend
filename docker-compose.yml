@@ -101,6 +101,8 @@ services:
       DB_PASSWORD_TRX_SERVICE: ${DB_PASSWORD_TRX_SERVICE}
       COMPANY_SERVICE_URL: ${COMPANY_SERVICE_URL}
       EUREKA_URL: ${EUREKA_URL}
+      RPC_URL: ${RPC_URL}
+      PRIVATE_KEY: ${PRIVATE_KEY}
     depends_on:
       - config-service
       - eureka-service

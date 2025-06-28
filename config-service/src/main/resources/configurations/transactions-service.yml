@@ -22,6 +22,11 @@ clients:
   company:
     base-url: ${COMPANY_SERVICE_URL:http://company-service}
 
+blockchain:
+  sepolia:
+    rpc-url: ${RPC_URL}
+  private-key: ${PRIVATE_KEY}
+
 eureka:
   instance:
     hostname: localhost

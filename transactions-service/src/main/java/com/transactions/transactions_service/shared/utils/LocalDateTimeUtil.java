@@ -11,7 +11,7 @@ public class LocalDateTimeUtil {
 
     private final ZoneId zoneLima = ZoneId.of("America/Lima");
 
-    public String calculateContractStatus(LocalDateTime start, LocalDateTime end) {
+    /*public String calculateContractStatus(LocalDateTime start, LocalDateTime end) {
         LocalDateTime now = ZonedDateTime.now(zoneLima).toLocalDateTime();
 
         if(now.isBefore(start)){
@@ -21,7 +21,7 @@ public class LocalDateTimeUtil {
         }else {
             return "FINISHED";
         }
-    }
+    }*/
 
     public LocalDateTime parseFlexibleDateTime(String input) {
         List<DateTimeFormatter> formats = List.of(
