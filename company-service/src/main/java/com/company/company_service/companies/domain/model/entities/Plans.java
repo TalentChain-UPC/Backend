@@ -10,12 +10,12 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Entity
-@Table(name = "plans")
-@NoArgsConstructor
+/*@NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
+@Setter*/
+@Entity
+@Table(name = "plans")
 public class Plans {
 
     @Id
@@ -39,5 +39,44 @@ public class Plans {
         this.price_per_employ = command.price_per_employ();
         this.max_employees = command.max_employees();
         this.description = command.description();
+    }
+
+    public Plans() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Double getPrice_per_employ() {
+        return price_per_employ;
+    }
+
+    public void setPrice_per_employ(Double price_per_employ) {
+        this.price_per_employ = price_per_employ;
+    }
+
+    public Integer getMax_employees() {
+        return max_employees;
+    }
+
+    public void setMax_employees(Integer max_employees) {
+        this.max_employees = max_employees;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

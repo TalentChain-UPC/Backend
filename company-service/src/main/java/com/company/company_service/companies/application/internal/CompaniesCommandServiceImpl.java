@@ -17,6 +17,7 @@ public class CompaniesCommandServiceImpl implements CompaniesCommandService {
     }
     @Override
     public Optional<Companies> handle(CreateCompanyCommand command) {
+        if (companiesRepository.existsByRuc(command.ruc()))return Optional.empty();
         var companies = new Companies(command);
         companiesRepository.save(companies);
         return Optional.of(companies);

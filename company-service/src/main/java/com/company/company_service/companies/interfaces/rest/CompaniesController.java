@@ -25,6 +25,14 @@ public class CompaniesController {
         this.companiesCommandService = companiesCommandService;
         this.companiesQueryService = companiesQueryService;
     }
+    @PostMapping("/create-by-ruc")
+    public ResponseEntity<Long> createCompanyByRUCIfNotExists(
+            @RequestBody CreateCompaniesResource createCompaniesResource) {
+        var createCompanyCommand = CreateCompaniesCommandFromResourceAssembler.toCommandFromResource(createCompaniesResource);
+        var companies = companiesCommandService.handle(createCompanyCommand);
+        if (companies.isEmpty()) return ResponseEntity.badRequest().build();
+        return new ResponseEntity<>(companies.get().getId(), HttpStatus.CREATED);
+    }
     @GetMapping
     public ResponseEntity<List<CompaniesResource>> getAllCompanies() {
         var companies = companiesQueryService.handle(new GetAllCompaniesQuery());

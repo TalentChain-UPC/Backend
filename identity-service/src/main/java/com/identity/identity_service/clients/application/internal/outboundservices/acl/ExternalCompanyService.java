@@ -1,5 +1,6 @@
 package com.identity.identity_service.clients.application.internal.outboundservices.acl;
 
+import com.identity.identity_service.iam.domain.model.commands.CreateCompanyCommand;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,10 +30,11 @@ public class ExternalCompanyService {
         return "";
     }
 
-    public Long createIfCompanyNotExists(String ruc) {
-        return webClient.get()
-                .uri("/api/v1/companies/create/{ruc}",ruc)
+    public Long createIfCompanyNotExists(CreateCompanyCommand command) {
+        return webClient.post()
+                .uri("/api/v1/companies/create-by-ruc/")
                 .header(HttpHeaders.AUTHORIZATION, getJwtFromRequest())
+                .bodyValue(command)
                 .retrieve()
                 .bodyToMono(Long.class)
                 .block();

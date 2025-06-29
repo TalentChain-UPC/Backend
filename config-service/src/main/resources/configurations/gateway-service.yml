@@ -64,6 +64,12 @@ spring:
                 - Path=/api/v1/evidences/**
               filters:
                 - AuthenticationFilter
+            - id: contracts
+              uri: lb://transactions-service
+              predicates:
+                - Path=/api/v1/contracts/**
+              filters:
+                - AuthenticationFilter
 
 authorization:
   jwt:

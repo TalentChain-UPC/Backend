@@ -122,7 +122,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     private Long createCompanyByRUC(CreateCompanyCommand command) {
-        return externalCompanyService.createIfCompanyNotExists(command.ruc());
+        return externalCompanyService.createIfCompanyNotExists(command);
     }
 
     @Override
