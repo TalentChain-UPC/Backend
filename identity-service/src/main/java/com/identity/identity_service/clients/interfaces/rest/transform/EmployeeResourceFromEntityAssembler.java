@@ -7,6 +7,7 @@ public class EmployeeResourceFromEntityAssembler {
     public static EmployeeResource toResourceFromEntity(Employee entity){
         return new EmployeeResource(
                 entity.getId(),
+                entity.getCompanyId(),
                 entity.getFullName().name(),
                 entity.getFullName().lastName(),
                 entity.getIdentity().age(),

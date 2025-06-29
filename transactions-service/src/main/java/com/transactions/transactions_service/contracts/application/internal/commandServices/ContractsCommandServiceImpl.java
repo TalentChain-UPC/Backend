@@ -66,14 +66,6 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
             return Optional.empty();
         }
 
-        /*String status = localDateTimeUtil.calculateContractStatus(startDateTime,endDateTime);
-        ContractStatus contractStatus;
-        try{
-            contractStatus=ContractStatus.valueOf(status);
-        }catch (Exception e){
-            return Optional.empty();
-        }*/
-
         boolean existsCompany = externalCompanyService.verifyIfCompanyExists(command.companyId());
         if (!existsCompany) {
             return Optional.empty();

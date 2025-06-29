@@ -8,16 +8,11 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-/**
- * Se creara un contrato cuando la empresa lo vea necesario, ya sea
- * cuando haya una campaña, una mision especial, etc como parte
- * del sistema gamificado
- */
-
 @Entity
 @Table(name = "contracts")
 public class Contract extends AuditableAbstractAggregateRoot<Contract> {
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private Long companyId;
     private String smartContractAddress;
@@ -25,17 +20,8 @@ public class Contract extends AuditableAbstractAggregateRoot<Contract> {
     @Enumerated(EnumType.STRING)
     private EvidenceType type;
 
-    /**
-     * el JSON debe tener requerimientos y si se cumplen
-     * se dará monedas adicionales a las que ya da el
-     * smart contract desplegado
-     */
-    // JSON "{something:x,som:y}"
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "json")
     private String requirements;
-
-    //@Enumerated(EnumType.STRING)
-    //private ContractStatus status;
 
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
@@ -47,7 +33,6 @@ public class Contract extends AuditableAbstractAggregateRoot<Contract> {
             CreateContractCommand command,
             String smartContractAddress,
             EvidenceType type,
-            //ContractStatus status,
             LocalDateTime startDateTime,
             LocalDateTime endDateTime) {
         this.name=command.name();
@@ -56,7 +41,6 @@ public class Contract extends AuditableAbstractAggregateRoot<Contract> {
         this.smartContractAddress=smartContractAddress;
         this.type=type;
         this.requirements=command.requirements();
-        //this.status=status;
         this.startDateTime=startDateTime;
         this.endDateTime=endDateTime;
     }
@@ -72,10 +56,6 @@ public class Contract extends AuditableAbstractAggregateRoot<Contract> {
     public Long getCompanyId() {
         return companyId;
     }
-
-    /*public ContractStatus getStatus() {
-        return status;
-    }*/
 
     public String getSmartContractAddress() {
         return smartContractAddress;
@@ -108,10 +88,6 @@ public class Contract extends AuditableAbstractAggregateRoot<Contract> {
     public void setRequirements(String requirements) {
         this.requirements = requirements;
     }
-
-    /*public void setStatus(ContractStatus status) {
-        this.status = status;
-    }*/
 
     public void setEndDateTime(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;

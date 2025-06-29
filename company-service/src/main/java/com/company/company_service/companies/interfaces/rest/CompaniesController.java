@@ -2,6 +2,7 @@ package com.company.company_service.companies.interfaces.rest;
 
 import com.company.company_service.companies.domain.model.commands.DeleteCompanyCommand;
 import com.company.company_service.companies.domain.model.entities.Companies;
+import com.company.company_service.companies.domain.model.queries.ExistsByCompanyIdQuery;
 import com.company.company_service.companies.domain.model.queries.GetAllCompaniesQuery;
 import com.company.company_service.companies.domain.model.queries.GetCompanyByIdQuery;
 import com.company.company_service.companies.domain.services.CompaniesCommandService;
@@ -47,6 +48,10 @@ public class CompaniesController {
         }
         var companiesResource = CompaniesResourceFromEntityAssembler.transformResourceFromEntity(companies.get());
         return ResponseEntity.ok(companiesResource);
+    }
+    @GetMapping("/{id}/exists")
+    public ResponseEntity<Boolean> existsCompanyById(@PathVariable Long id) {
+        return ResponseEntity.ok(companiesQueryService.handle(new ExistsByCompanyIdQuery(id)));
     }
     /*@PostMapping
     public ResponseEntity<CompaniesResource> createCompanies(@RequestBody CreateCompaniesResource resource) {
