@@ -10,12 +10,12 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Entity
-@Table(name = "companies")
-@Getter
+/*@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
+@Setter*/
+@Entity
+@Table(name = "companies")
 public class Companies extends AuditableAbstractAggregateRoot<Companies> {
     @Column(name = "name")
     private String name;
@@ -30,5 +30,32 @@ public class Companies extends AuditableAbstractAggregateRoot<Companies> {
         this.name = command.name();
         this.ruc = command.ruc();
         this.sector = command.sector();
+    }
+
+    public Companies() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRuc() {
+        return ruc;
+    }
+
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
+    }
+
+    public String getSector() {
+        return sector;
+    }
+
+    public void setSector(String sector) {
+        this.sector = sector;
     }
 }

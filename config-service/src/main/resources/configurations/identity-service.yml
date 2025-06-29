@@ -33,6 +33,9 @@ eureka:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
       #defaultZone: ${EUREKA_URL}
 
+clients:
+  company:
+    base-url: ${COMPANY_SERVICE_URL:http://company-service}
 
 managers-account:
   temporary-pswd: ${PSWD}

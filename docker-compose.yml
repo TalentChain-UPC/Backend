@@ -46,6 +46,7 @@ services:
       AUTHORIZATION_JWT_SECRET: ${AUTHORIZATION_JWT_SECRET}
       AUTHORIZATION_JWT_EXP: ${AUTHORIZATION_JWT_EXP}
       EUREKA_URL: ${EUREKA_URL}
+      COMPANY_SERVICE_URL: ${COMPANY_SERVICE_URL}
     depends_on:
       - config-service
       - eureka-service

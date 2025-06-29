@@ -1,5 +1,6 @@
 package com.identity.identity_service.iam.application.internal.commandServices;
 
+import com.identity.identity_service.clients.application.internal.outboundservices.acl.ExternalCompanyService;
 import com.identity.identity_service.clients.domain.model.aggregates.Employee;
 import com.identity.identity_service.iam.application.internal.outboundservices.acl.ExternalClientService;
 import com.identity.identity_service.iam.application.internal.outboundservices.hashing.HashingService;
@@ -8,6 +9,7 @@ import com.identity.identity_service.iam.domain.exceptions.IncorrectPasswordExce
 import com.identity.identity_service.iam.domain.exceptions.UserAlreadyExistsException;
 import com.identity.identity_service.iam.domain.exceptions.UserNotFoundException;
 import com.identity.identity_service.iam.domain.model.aggregates.User;
+import com.identity.identity_service.iam.domain.model.commands.CreateCompanyCommand;
 import com.identity.identity_service.iam.domain.model.commands.CreateManagerCommand;
 import com.identity.identity_service.iam.domain.model.commands.SignInCommand;
 import com.identity.identity_service.iam.domain.model.commands.SignUpEmployeeCommand;
@@ -32,6 +34,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final ExternalClientService externalClientService;
+    private final ExternalCompanyService externalCompanyService;
 
     private static final Set<String> itAdminOccupations = Set.of(
             "soporte tecnico","administrador de sistemas", "soporte", "mesa de ayuda", "help desk"
@@ -42,12 +45,14 @@ public class UserCommandServiceImpl implements UserCommandService {
             HashingService hashingService,
             RoleRepository roleRepository,
             UserRepository userRepository,
-            ExternalClientService externalClientService) {
+            ExternalClientService externalClientService,
+            ExternalCompanyService externalCompanyService) {
         this.tokenService = tokenService;
         this.hashingService = hashingService;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.externalClientService = externalClientService;
+        this.externalCompanyService = externalCompanyService;
     }
 
     @Override
@@ -116,12 +121,20 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     }
 
+    private Long createCompanyByRUC(CreateCompanyCommand command) {
+        return externalCompanyService.createIfCompanyNotExists(command);
+    }
+
     @Override
-    public Optional<User> handle(SignUpEmployeeCommand command) {
+    public Optional<User> handle(SignUpEmployeeCommand command, CreateCompanyCommand companyCommand) {
+        Long companyId = createCompanyByRUC(companyCommand);
+        if(companyId==0L){
+            return Optional.empty();
+        }
         var employee = externalClientService.createEmployee(
                 command.name(), command.lastName(), command.age(), command.dni(),
                 command.gender(), command.location(), command.phoneNumber(), command.workEmail(),
-                command.personalEmail(), command.occupation(), command.area()
+                command.personalEmail(), command.occupation(), command.area(), companyId
         );
 
         if (employee.isEmpty())return Optional.empty();
@@ -132,8 +145,13 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     @Override
-    public List<User> handle(List<SignUpEmployeeCommand> commands) {
-        var employeeList = externalClientService.createEmployees(commands);
+    public List<User> handle(List<SignUpEmployeeCommand> commands, CreateCompanyCommand companyCommand) {
+        Long companyId = createCompanyByRUC(companyCommand);
+        if(companyId==0L){
+            return Collections.emptyList();
+        }
+
+        var employeeList = externalClientService.createEmployees(commands,companyId);
         if (employeeList.isEmpty())return Collections.emptyList();
 
         List<User> usersList = employeeList.stream().map(employee -> this.createUser(employee.getContactInfo().workEmail(), employee)).collect(Collectors.toList());
