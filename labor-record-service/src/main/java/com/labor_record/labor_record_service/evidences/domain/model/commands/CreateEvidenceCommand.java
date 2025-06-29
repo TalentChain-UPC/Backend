@@ -4,6 +4,7 @@ public record CreateEvidenceCommand(
         Long employeeId,
         String type,
         String description,
+        String data,
         CreateCertificateCommand createCertificateCommand
 ) {
 }

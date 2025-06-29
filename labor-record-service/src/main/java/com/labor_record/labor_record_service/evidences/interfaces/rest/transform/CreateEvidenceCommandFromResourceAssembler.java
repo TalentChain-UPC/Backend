@@ -10,8 +10,12 @@ public class CreateEvidenceCommandFromResourceAssembler {
                 resource.employeeId(),
                 resource.type(),
                 resource.description(),
+                resource.data(),
                 new CreateCertificateCommand(
-                        resource.url()
+                        resource.url(),
+                        resource.name(),
+                        resource.institutionName(),
+                        resource.issuedDate()
                 )
         );
 
