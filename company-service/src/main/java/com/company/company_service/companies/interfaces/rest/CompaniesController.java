@@ -30,7 +30,7 @@ public class CompaniesController {
             @RequestBody CreateCompaniesResource createCompaniesResource) {
         var createCompanyCommand = CreateCompaniesCommandFromResourceAssembler.toCommandFromResource(createCompaniesResource);
         var companies = companiesCommandService.handle(createCompanyCommand);
-        if (companies.isEmpty()) return ResponseEntity.badRequest().build();
+        //if (companies.isEmpty()) return ResponseEntity.ok();
         return new ResponseEntity<>(companies.get().getId(), HttpStatus.CREATED);
     }
     @GetMapping
@@ -48,7 +48,7 @@ public class CompaniesController {
         var companiesResource = CompaniesResourceFromEntityAssembler.transformResourceFromEntity(companies.get());
         return ResponseEntity.ok(companiesResource);
     }
-    @PostMapping
+    /*@PostMapping
     public ResponseEntity<CompaniesResource> createCompanies(@RequestBody CreateCompaniesResource resource) {
         var createCompanyCommand = CreateCompaniesCommandFromResourceAssembler.toCommandFromResource(resource);
         var companies = companiesCommandService.handle(createCompanyCommand);
@@ -63,5 +63,5 @@ public class CompaniesController {
         if (companies.isEmpty()) return ResponseEntity.badRequest().build();
         var companiesResource = CompaniesResourceFromEntityAssembler.transformResourceFromEntity(companies.get());
         return ResponseEntity.ok(companiesResource);
-    }
+    }*/
 }

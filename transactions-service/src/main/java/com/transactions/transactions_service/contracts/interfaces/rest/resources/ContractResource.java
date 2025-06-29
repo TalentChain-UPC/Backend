@@ -7,7 +7,6 @@ public record ContractResource(
         Long companyId,
         String smartContractAddress,
         String evidenceType,
-        String contractStatus,
         String startDateTime,
         String endDateTime
 ) {

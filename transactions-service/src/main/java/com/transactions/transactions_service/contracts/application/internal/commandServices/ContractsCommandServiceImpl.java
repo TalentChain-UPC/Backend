@@ -20,17 +20,17 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
     private final ContractsRepository contractsRepository;
     private final ExternalCompanyService externalCompanyService;
 
-    private final Web3Utils web3Utils;
+    //private final Web3Utils web3Utils;
     private final LocalDateTimeUtil localDateTimeUtil;
 
     public ContractsCommandServiceImpl(
             ContractsRepository contractsRepository,
             ExternalCompanyService externalCompanyService,
-            Web3Utils web3Utils,
+            //Web3Utils web3Utils,
             LocalDateTimeUtil localDateTimeUtil) {
         this.contractsRepository = contractsRepository;
         this.externalCompanyService = externalCompanyService;
-        this.web3Utils = web3Utils;
+        //this.web3Utils = web3Utils;
         this.localDateTimeUtil = localDateTimeUtil;
     }
 

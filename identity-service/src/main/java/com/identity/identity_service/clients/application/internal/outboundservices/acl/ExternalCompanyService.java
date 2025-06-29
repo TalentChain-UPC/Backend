@@ -32,7 +32,7 @@ public class ExternalCompanyService {
 
     public Long createIfCompanyNotExists(CreateCompanyCommand command) {
         return webClient.post()
-                .uri("/api/v1/companies/create-by-ruc/")
+                .uri("/api/v1/companies/create-by-ruc")
                 .header(HttpHeaders.AUTHORIZATION, getJwtFromRequest())
                 .bodyValue(command)
                 .retrieve()

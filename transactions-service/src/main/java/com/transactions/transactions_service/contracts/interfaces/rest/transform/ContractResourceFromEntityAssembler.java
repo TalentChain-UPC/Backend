@@ -12,7 +12,6 @@ public class ContractResourceFromEntityAssembler {
                 entity.getCompanyId(),
                 entity.getSmartContractAddress(),
                 entity.getType().name(),
-                entity.getStatus().name(),
                 entity.getStartDateTime().toString(),
                 entity.getEndDateTime().toString()
         );
