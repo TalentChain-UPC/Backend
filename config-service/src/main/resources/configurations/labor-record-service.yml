@@ -21,6 +21,8 @@ spring:
 clients:
   identity:
     base-url: ${IDENTITY_SERVICE_URL:http://identity-service}
+  transactions:
+    base-url: ${TRX_SERVICE_URL:http://transactions-service}
 
 eureka:
   instance:

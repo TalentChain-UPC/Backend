@@ -65,6 +65,9 @@ public class EvidencesCommandServiceImpl implements EvidenceCommandService {
     public Optional<Evidence> handle(ValidateEvidenceCommand command) {
         var evidence = evidencesRepository.findById(command.id());
         if(evidence.isEmpty()) return Optional.empty();
+
+        // validar con contrato
+
         evidence.get().setValidated(command.validate());
         evidencesRepository.save(evidence.get());
         return evidence;
