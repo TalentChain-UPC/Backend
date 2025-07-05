@@ -3,6 +3,7 @@ package com.transactions.transactions_service.contracts.application.internal.com
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactions.transactions_service.contracts.application.internal.outboundservices.acl.ExternalCompanyService;
+import com.transactions.transactions_service.contracts.application.internal.outboundservices.acl.ExternalTransactionsContractsService;
 import com.transactions.transactions_service.contracts.application.internal.outboundservices.acl.Web3Utils;
 import com.transactions.transactions_service.contracts.domain.model.aggregates.Contract;
 import com.transactions.transactions_service.contracts.domain.model.commands.CreateContractCommand;
@@ -22,6 +23,7 @@ import java.util.Optional;
 class ContractsCommandServiceImpl implements ContractsCommandService {
     private final ContractsRepository contractsRepository;
     private final ExternalCompanyService externalCompanyService;
+    private final ExternalTransactionsContractsService externalTransactionsService;
 
     //private final Web3Utils web3Utils;
     private final LocalDateTimeUtil localDateTimeUtil;
@@ -31,11 +33,13 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
     public ContractsCommandServiceImpl(
             ContractsRepository contractsRepository,
             ExternalCompanyService externalCompanyService,
+            ExternalTransactionsContractsService externalTransactionsService,
             //Web3Utils web3Utils,
             LocalDateTimeUtil localDateTimeUtil,
             ObjectMapper objectMapper) {
         this.contractsRepository = contractsRepository;
         this.externalCompanyService = externalCompanyService;
+        this.externalTransactionsService = externalTransactionsService;
         //this.web3Utils = web3Utils;
         this.localDateTimeUtil = localDateTimeUtil;
         this.objectMapper = objectMapper;
@@ -153,6 +157,12 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
 
         // debe ser async
         // externalTransactionsService.transfer(command.employeeId(),command.evidenceType(),monedasVirtuales);
-
+        externalTransactionsService.executeTransfer(
+                command.companyId(),
+                command.employeeId(),
+                command.evidenceType(),
+                virtualCoins,
+                LocalDateTime.now().toString()
+        );
     }
 }

@@ -10,6 +10,8 @@ public class ValidateEvidenceWithContractCommandFromResourceAssembler {
         return new ValidateEvidenceWithContractCommand(
                 resource.evidenceType(),
                 resource.employeeId(),
+                resource.fullName(),
+                resource.companyId(),
                 resource.data()
         );
     }

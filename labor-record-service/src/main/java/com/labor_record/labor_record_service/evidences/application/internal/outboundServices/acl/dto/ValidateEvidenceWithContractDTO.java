@@ -3,6 +3,8 @@ package com.labor_record.labor_record_service.evidences.application.internal.out
 public record ValidateEvidenceWithContractDTO(
         String evidenceType,
         Long employeeId,
+        String fullName,
+        Long companyId,
         String data
 ) {
 }

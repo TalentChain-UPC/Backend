@@ -26,8 +26,20 @@ public class ExternalTransactionsService {
         }
         return "";
     }
-    public Boolean validateEvidenceWithContract(String evidenceType, Long employeeId, String data) {
-        var dto = new ValidateEvidenceWithContractDTO(evidenceType, employeeId, data);
+    public Boolean validateEvidenceWithContract(
+            String evidenceType,
+            Long employeeId,
+            String fullName,
+            Long companyId,
+            String data
+    ) {
+        var dto = new ValidateEvidenceWithContractDTO(
+                evidenceType,
+                employeeId,
+                fullName,
+                companyId,
+                data
+        );
         return webClient.post()
                 .uri("/api/v1/contracts/validate-evidence")
                 .header(HttpHeaders.AUTHORIZATION, getJwtFromRequest())

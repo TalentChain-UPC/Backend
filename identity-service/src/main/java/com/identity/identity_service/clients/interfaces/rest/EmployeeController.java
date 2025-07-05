@@ -22,7 +22,7 @@ public class EmployeeController {
         this.employeeQueryService = employeeQueryService;
     }
 
-    @PreAuthorize(value = "hasAnyRole('COMPANY','ADMIN')")
+    //@PreAuthorize(value = "hasAnyRole('COMPANY','ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeResource> getEmployeeById(@PathVariable Long id){
         var employee = employeeQueryService.handle(new GetEmployeeByIdQuery(id));

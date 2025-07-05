@@ -3,6 +3,8 @@ package com.transactions.transactions_service.contracts.interfaces.rest.resource
 public record ValidateEvidenceWithContractResource(
         String evidenceType,
         Long employeeId,
+        String fullName,
+        Long companyId,
         String data
 ) {
 }
