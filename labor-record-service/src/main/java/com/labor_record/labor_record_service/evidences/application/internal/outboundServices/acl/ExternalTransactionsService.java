@@ -1,5 +1,6 @@
 package com.labor_record.labor_record_service.evidences.application.internal.outboundServices.acl;
 
+import com.labor_record.labor_record_service.evidences.application.internal.outboundServices.acl.dto.ValidateEvidenceWithContractDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,11 +26,14 @@ public class ExternalTransactionsService {
         }
         return "";
     }
-    public void validateContract(Long employeeId) {
-        webClient.get()
-                .uri("/api/v1/contracts/{id}/exists",employeeId)
+    public Boolean validateEvidenceWithContract(String evidenceType, Long employeeId, String data) {
+        var dto = new ValidateEvidenceWithContractDTO(evidenceType, employeeId, data);
+        return webClient.post()
+                .uri("/api/v1/contracts/validate-evidence")
                 .header(HttpHeaders.AUTHORIZATION, getJwtFromRequest())
+                .bodyValue(dto)
                 .retrieve()
-                .bodyToMono(Boolean.class);
+                .bodyToMono(Boolean.class)
+                .block();
     }
 }

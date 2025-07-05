@@ -3,8 +3,10 @@ package com.transactions.transactions_service.contracts.interfaces.rest;
 import com.transactions.transactions_service.contracts.domain.services.ContractsCommandService;
 import com.transactions.transactions_service.contracts.interfaces.rest.resources.ContractResource;
 import com.transactions.transactions_service.contracts.interfaces.rest.resources.CreateContractResource;
+import com.transactions.transactions_service.contracts.interfaces.rest.resources.ValidateEvidenceWithContractResource;
 import com.transactions.transactions_service.contracts.interfaces.rest.transform.ContractResourceFromEntityAssembler;
 import com.transactions.transactions_service.contracts.interfaces.rest.transform.CreateContractCommandFromResourceAssembler;
+import com.transactions.transactions_service.contracts.interfaces.rest.transform.ValidateEvidenceWithContractCommandFromResourceAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +33,14 @@ public class ContractsController {
         var resource = ContractResourceFromEntityAssembler
                 .toResourceFromEntity(contract.get());
         return new ResponseEntity<>(resource, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/validate-evidence")
+    public ResponseEntity<Boolean> validateEvidenceWithContract(
+            @RequestBody ValidateEvidenceWithContractResource validateEvidenceWithContractResource){
+        var command = ValidateEvidenceWithContractCommandFromResourceAssembler.toCommandFromResource(validateEvidenceWithContractResource);
+        contractsCommandService.handle(command);
+        return ResponseEntity.ok(true);
     }
 
 }
