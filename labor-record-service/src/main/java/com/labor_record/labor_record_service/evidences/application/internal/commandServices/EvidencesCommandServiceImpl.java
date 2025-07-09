@@ -70,14 +70,20 @@ public class EvidencesCommandServiceImpl implements EvidenceCommandService {
         var evidence = evidencesRepository.findById(command.id());
         if(evidence.isEmpty()) return Optional.empty();
 
+        if(!command.validate()){
+            evidence.get().setValidated(command.validate());
+            evidencesRepository.save(evidence.get());
+            return evidence;
+        }
+
         var employee = externalProfileService.getEmployeeById(evidence.get().getEmployeeId());
 
         // validar con contrato
         //enviar a endpoint tipo de evidencia, employeeId, data (json)
-        boolean validated = externalTransactionsService.validateEvidenceWithContract(
+        externalTransactionsService.validateEvidenceWithContract(
                 evidence.get().getType().name(),
                 evidence.get().getEmployeeId(),
-                employee.name()+employee.lastName(),
+                employee.name()+" "+employee.lastName(),
                 employee.companyId(),
                 evidence.get().getData()
         );

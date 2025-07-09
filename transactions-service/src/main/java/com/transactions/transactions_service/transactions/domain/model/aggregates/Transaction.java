@@ -19,8 +19,8 @@ public class Transaction {
     private String evidenceType;
     private String timestamp;
 
-    public Transaction(CreateTransactionCommand command,String description, String trxHash) {
-        this.transactionId=trxHash;
+    public Transaction(CreateTransactionCommand command,String description) {
+        this.transactionId=command.trxHash();
         this.companyId=command.companyId();
         this.employeeId=command.employeeId();
         this.description=description;

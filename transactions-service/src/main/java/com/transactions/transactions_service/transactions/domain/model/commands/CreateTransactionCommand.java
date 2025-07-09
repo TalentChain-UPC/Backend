@@ -5,6 +5,8 @@ public record CreateTransactionCommand(
         Long employeeId,
         String evidenceType,
         Integer virtualCoins,
-        String timestamp
+        String timestamp,
+        String fullName,
+        String trxHash
 ) {
 }

@@ -12,6 +12,7 @@ import com.transactions.transactions_service.contracts.domain.model.commands.Val
 import com.transactions.transactions_service.contracts.domain.model.valueObjects.EvidenceType;
 import com.transactions.transactions_service.contracts.domain.services.ContractsCommandService;
 import com.transactions.transactions_service.contracts.infrastructure.persistence.jpa.repositories.ContractsRepository;
+import com.transactions.transactions_service.shared.utils.EvidenceBonusUtil;
 import com.transactions.transactions_service.shared.utils.LocalDateTimeUtil;
 import org.springframework.stereotype.Service;
 
@@ -25,24 +26,23 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
     private final ExternalCompanyService externalCompanyService;
     private final ExternalTransactionsContractsService externalTransactionsService;
 
-    //private final Web3Utils web3Utils;
+    private final Web3Utils web3Utils;
     private final LocalDateTimeUtil localDateTimeUtil;
-
-    private final ObjectMapper objectMapper;
+    private final EvidenceBonusUtil evidenceBonusUtil;
 
     public ContractsCommandServiceImpl(
             ContractsRepository contractsRepository,
             ExternalCompanyService externalCompanyService,
             ExternalTransactionsContractsService externalTransactionsService,
-            //Web3Utils web3Utils,
+            Web3Utils web3Utils,
             LocalDateTimeUtil localDateTimeUtil,
-            ObjectMapper objectMapper) {
+            EvidenceBonusUtil evidenceBonusUtil) {
         this.contractsRepository = contractsRepository;
         this.externalCompanyService = externalCompanyService;
         this.externalTransactionsService = externalTransactionsService;
-        //this.web3Utils = web3Utils;
+        this.web3Utils = web3Utils;
         this.localDateTimeUtil = localDateTimeUtil;
-        this.objectMapper = objectMapper;
+        this.evidenceBonusUtil = evidenceBonusUtil;
     }
 
     private String getContractByEvidenceType(EvidenceType evidenceType) {
@@ -102,8 +102,8 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
         Integer virtualCoins = 0;
 
         //se le transfiere la cantidad por defecto del smart contract
-        //BigInteger reward = web3Utils.getReward(smartContractAddress);
-        BigInteger reward = new BigInteger("100");
+        BigInteger reward = web3Utils.getReward(smartContractAddress);
+        //BigInteger reward = new BigInteger("100");
         int value=0;
         if(reward.compareTo(BigInteger.valueOf(Integer.MAX_VALUE))>=0 &&
            reward.compareTo(BigInteger.valueOf(Integer.MIN_VALUE))<=0){
@@ -126,10 +126,24 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
                     return !now.isBefore(contract.getStartDateTime()) && !now.isAfter(contract.getEndDateTime());
                 })
                 .map(contract -> {
+                    try {
+                        return evidenceBonusUtil.calculateBonus(
+                                contract.getType(),
+                                contract.getRequirements(),
+                                command.data()
+                        );
+                    } catch (Exception e) {
+                        return 0;
+                    }
+                })
+                .reduce(0, Integer::sum);
+                /*.map(contract -> {
                     int bonusValue = 0;
                     try {
                         String requirements = contract.getRequirements();
                         String data = command.data();
+
+                        // bonusValue = bonusValue + evidenceBonusUtil(contract.getType(), requirements, data);
 
                         JsonNode requirementsJson = objectMapper.readTree(requirements);
                         JsonNode dataJson = objectMapper.readTree(data);
@@ -150,19 +164,27 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
                         return bonusValue;
                     }
                     return bonusValue;
-                })
-                .reduce(0, Integer::sum);
+                })*/
+                //.reduce(0, Integer::sum);
 
         virtualCoins = virtualCoins + additionalCoins;
 
-        // debe ser async
+
+        String trxHash = web3Utils.executeContract(
+                smartContractAddress,
+                command.companyId().toString(),
+                command.employeeId().toString()
+        );
+
         // externalTransactionsService.transfer(command.employeeId(),command.evidenceType(),monedasVirtuales);
         externalTransactionsService.executeTransfer(
                 command.companyId(),
                 command.employeeId(),
                 command.evidenceType(),
                 virtualCoins,
-                LocalDateTime.now().toString()
+                LocalDateTime.now().toString(),
+                command.fullName(),
+                trxHash
         );
     }
 }

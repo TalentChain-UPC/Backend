@@ -26,7 +26,7 @@ public class ExternalTransactionsService {
         }
         return "";
     }
-    public Boolean validateEvidenceWithContract(
+    public void validateEvidenceWithContract(
             String evidenceType,
             Long employeeId,
             String fullName,
@@ -40,12 +40,12 @@ public class ExternalTransactionsService {
                 companyId,
                 data
         );
-        return webClient.post()
+        webClient.post()
                 .uri("/api/v1/contracts/validate-evidence")
                 .header(HttpHeaders.AUTHORIZATION, getJwtFromRequest())
                 .bodyValue(dto)
                 .retrieve()
                 .bodyToMono(Boolean.class)
-                .block();
+                .subscribe();
     }
 }

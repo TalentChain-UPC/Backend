@@ -17,7 +17,9 @@ public class TransactionsContextFacade {
             Long employeeId,
             String evidenceType,
             Integer virtualCoins,
-            String timestamp
+            String timestamp,
+            String fullName,
+            String trxHash
     ){
         transactionsCommandService.handle(
                 new CreateTransactionCommand(
@@ -25,7 +27,9 @@ public class TransactionsContextFacade {
                         employeeId,
                         evidenceType,
                         virtualCoins,
-                        timestamp
+                        timestamp,
+                        fullName,
+                        trxHash
                 )
         );
     }

@@ -1,6 +1,7 @@
 package com.transactions.transactions_service.contracts.application.internal.outboundservices.acl;
 
 import com.transactions.transactions_service.transactions.interfaces.acl.TransactionsContextFacade;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,14 +17,18 @@ public class ExternalTransactionsContractsService {
             Long employeeId,
             String evidenceType,
             Integer virtualCoins,
-            String timestamp
+            String timestamp,
+            String fullName,
+            String trxHash
     ){
         transactionsContextFacade.createTransaction(
                 companyId,
                 employeeId,
                 evidenceType,
                 virtualCoins,
-                timestamp
+                timestamp,
+                fullName,
+                trxHash
         );
     }
 }
