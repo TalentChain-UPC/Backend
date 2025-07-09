@@ -1,6 +1,7 @@
 package com.labor_record.labor_record_service.evidences.application.internal.commandServices;
 
 import com.labor_record.labor_record_service.evidences.application.internal.outboundServices.acl.ExternalProfileService;
+import com.labor_record.labor_record_service.evidences.application.internal.outboundServices.acl.ExternalTransactionsService;
 import com.labor_record.labor_record_service.evidences.domain.model.aggregates.Evidence;
 import com.labor_record.labor_record_service.evidences.domain.model.commands.CreateEvidenceCommand;
 import com.labor_record.labor_record_service.evidences.domain.model.commands.ValidateEvidenceCommand;
@@ -18,14 +19,17 @@ public class EvidencesCommandServiceImpl implements EvidenceCommandService {
     private final EvidencesRepository evidencesRepository;
     private final CertificatesRepository certificatesRepository;
     private final ExternalProfileService externalProfileService;
+    private final ExternalTransactionsService externalTransactionsService;
 
     public EvidencesCommandServiceImpl(
             EvidencesRepository evidencesRepository,
             CertificatesRepository certificatesRepository,
-            ExternalProfileService externalProfileService) {
+            ExternalProfileService externalProfileService,
+            ExternalTransactionsService externalTransactionsService) {
         this.evidencesRepository = evidencesRepository;
         this.certificatesRepository = certificatesRepository;
         this.externalProfileService = externalProfileService;
+        this.externalTransactionsService = externalTransactionsService;
     }
 
     @Override
@@ -65,6 +69,25 @@ public class EvidencesCommandServiceImpl implements EvidenceCommandService {
     public Optional<Evidence> handle(ValidateEvidenceCommand command) {
         var evidence = evidencesRepository.findById(command.id());
         if(evidence.isEmpty()) return Optional.empty();
+
+        if(!command.validate()){
+            evidence.get().setValidated(command.validate());
+            evidencesRepository.save(evidence.get());
+            return evidence;
+        }
+
+        var employee = externalProfileService.getEmployeeById(evidence.get().getEmployeeId());
+
+        // validar con contrato
+        //enviar a endpoint tipo de evidencia, employeeId, data (json)
+        externalTransactionsService.validateEvidenceWithContract(
+                evidence.get().getType().name(),
+                evidence.get().getEmployeeId(),
+                employee.name()+" "+employee.lastName(),
+                employee.companyId(),
+                evidence.get().getData()
+        );
+
         evidence.get().setValidated(command.validate());
         evidencesRepository.save(evidence.get());
         return evidence;

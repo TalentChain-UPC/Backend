@@ -2,6 +2,9 @@ package com.labor_record.labor_record_service.evidences.interfaces.rest.resource
 
 public record CertificateResource(
         Long id,
-        String url
+        String url,
+        String name,
+        String institutionName,
+        String issuedDate
 ) {
 }

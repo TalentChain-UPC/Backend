@@ -6,6 +6,8 @@ public record CreateManagerCommand(
         String email,
         String password,
         Boolean isActive,
-        Employee employee
+        Employee employee,
+        String name,
+        String lastName
 ) {
 }

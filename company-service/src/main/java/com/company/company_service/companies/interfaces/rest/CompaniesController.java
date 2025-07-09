@@ -2,6 +2,7 @@ package com.company.company_service.companies.interfaces.rest;
 
 import com.company.company_service.companies.domain.model.commands.DeleteCompanyCommand;
 import com.company.company_service.companies.domain.model.entities.Companies;
+import com.company.company_service.companies.domain.model.queries.ExistsByCompanyIdQuery;
 import com.company.company_service.companies.domain.model.queries.GetAllCompaniesQuery;
 import com.company.company_service.companies.domain.model.queries.GetCompanyByIdQuery;
 import com.company.company_service.companies.domain.services.CompaniesCommandService;
@@ -25,6 +26,14 @@ public class CompaniesController {
         this.companiesCommandService = companiesCommandService;
         this.companiesQueryService = companiesQueryService;
     }
+    @PostMapping("/create-by-ruc")
+    public ResponseEntity<Long> createCompanyByRUCIfNotExists(
+            @RequestBody CreateCompaniesResource createCompaniesResource) {
+        var createCompanyCommand = CreateCompaniesCommandFromResourceAssembler.toCommandFromResource(createCompaniesResource);
+        var companies = companiesCommandService.handle(createCompanyCommand);
+        //if (companies.isEmpty()) return ResponseEntity.ok();
+        return new ResponseEntity<>(companies.get().getId(), HttpStatus.CREATED);
+    }
     @GetMapping
     public ResponseEntity<List<CompaniesResource>> getAllCompanies() {
         var companies = companiesQueryService.handle(new GetAllCompaniesQuery());
@@ -40,7 +49,11 @@ public class CompaniesController {
         var companiesResource = CompaniesResourceFromEntityAssembler.transformResourceFromEntity(companies.get());
         return ResponseEntity.ok(companiesResource);
     }
-    @PostMapping
+    @GetMapping("/{id}/exists")
+    public ResponseEntity<Boolean> existsCompanyById(@PathVariable Long id) {
+        return ResponseEntity.ok(companiesQueryService.handle(new ExistsByCompanyIdQuery(id)));
+    }
+    /*@PostMapping
     public ResponseEntity<CompaniesResource> createCompanies(@RequestBody CreateCompaniesResource resource) {
         var createCompanyCommand = CreateCompaniesCommandFromResourceAssembler.toCommandFromResource(resource);
         var companies = companiesCommandService.handle(createCompanyCommand);
@@ -55,5 +68,5 @@ public class CompaniesController {
         if (companies.isEmpty()) return ResponseEntity.badRequest().build();
         var companiesResource = CompaniesResourceFromEntityAssembler.transformResourceFromEntity(companies.get());
         return ResponseEntity.ok(companiesResource);
-    }
+    }*/
 }

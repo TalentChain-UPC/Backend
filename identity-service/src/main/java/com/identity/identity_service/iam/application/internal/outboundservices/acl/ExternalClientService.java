@@ -29,7 +29,8 @@ public class ExternalClientService {
             String workEmail,
             String personalEmail,
             String occupation,
-            String area
+            String area,
+            Long companyId
     ){
         return employeeContextFacade.createEmployee(
                 name,
@@ -42,17 +43,18 @@ public class ExternalClientService {
                 workEmail,
                 personalEmail,
                 occupation,
-                area
+                area,
+                companyId
         );
 
     }
 
-    public List<Employee> createEmployees(List<SignUpEmployeeCommand> commands){
+    public List<Employee> createEmployees(List<SignUpEmployeeCommand> commands, Long companyId) {
         var employeeDTOList = commands.stream().map(command -> new EmployeeDTO(
                 command.name(), command.lastName(), command.age(), command.dni(),
                 command.gender(), command.location(), command.phoneNumber(),
                 command.workEmail(), command.personalEmail(),
-                command.occupation(), command.area())).collect(Collectors.toList());
+                command.occupation(), command.area(),companyId)).collect(Collectors.toList());
         return employeeContextFacade.createEmployees(employeeDTOList);
     }
 }

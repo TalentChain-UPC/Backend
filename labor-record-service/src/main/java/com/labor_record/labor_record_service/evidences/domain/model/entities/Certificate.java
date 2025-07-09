@@ -10,10 +10,17 @@ public class Certificate extends AuditableModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+    private String institutionName;
+    private String issuedDate;
+
     @Column(nullable = false,columnDefinition = "TEXT")
     private String url;
 
     public Certificate(CreateCertificateCommand command) {
+        this.name=command.name();
+        this.institutionName=command.institutionName();
+        this.issuedDate=command.issuedDate();
         this.url=command.url();
     }
     public Certificate() {
@@ -25,5 +32,17 @@ public class Certificate extends AuditableModel {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getInstitutionName() {
+        return institutionName;
+    }
+
+    public String getIssuedDate() {
+        return issuedDate;
     }
 }

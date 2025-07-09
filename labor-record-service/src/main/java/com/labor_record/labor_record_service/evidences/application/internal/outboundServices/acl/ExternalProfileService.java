@@ -1,5 +1,6 @@
 package com.labor_record.labor_record_service.evidences.application.internal.outboundServices.acl;
 
+import com.labor_record.labor_record_service.evidences.application.internal.outboundServices.acl.dto.EmployeeDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,15 @@ public class ExternalProfileService {
                 .header(HttpHeaders.AUTHORIZATION, getJwtFromRequest())
                 .retrieve()
                 .bodyToMono(Boolean.class)
+                .block();
+    }
+
+    public EmployeeDTO getEmployeeById(Long employeeId){
+        return webClient.get()
+                .uri("/api/v1/employees/{id}",employeeId)
+                .header(HttpHeaders.AUTHORIZATION, getJwtFromRequest())
+                .retrieve()
+                .bodyToMono(EmployeeDTO.class)
                 .block();
     }
 }

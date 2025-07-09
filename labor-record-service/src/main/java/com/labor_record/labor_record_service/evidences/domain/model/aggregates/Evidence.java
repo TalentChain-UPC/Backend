@@ -28,6 +28,9 @@ public class Evidence extends AuditableAbstractAggregateRoot<Evidence> {
     @JoinColumn(name = "certificate_id",unique = true)
     private Certificate certificate;
 
+    @Column(columnDefinition = "json", nullable = false)
+    private String data;
+
     public Evidence(CreateEvidenceCommand command, Type type, Certificate certificate) {
         this.employeeId= command.employeeId();
         this.type = type;
@@ -35,6 +38,7 @@ public class Evidence extends AuditableAbstractAggregateRoot<Evidence> {
         this.validated=false;
         this.requireCertification=true;
         this.certificate=certificate;
+        this.data=command.data();
     }
 
     public Evidence(CreateEvidenceCommand command, Type type) {
@@ -71,6 +75,10 @@ public class Evidence extends AuditableAbstractAggregateRoot<Evidence> {
 
     public boolean isRequireCertification() {
         return requireCertification;
+    }
+
+    public String getData() {
+        return data;
     }
 
     public void setDescription(String description) {

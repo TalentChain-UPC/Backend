@@ -20,6 +20,8 @@ public class Employee{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long companyId;
+
     @Embedded
     private FullName fullName;
 
@@ -40,6 +42,7 @@ public class Employee{
     public Employee() {}
 
     public Employee(CreateEmployeeCommand command,Area area){
+        this.companyId = command.companyId();
         this.fullName=new FullName(command.name(),command.lastName());
         this.identity=new IdentityInfo(command.age(),command.dni(),command.gender(),command.location());
         this.contactInfo=new ContactInfo(command.phoneNumber(),command.workEmail(),command.personalEmail());
@@ -53,6 +56,10 @@ public class Employee{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
     }
 
     public FullName getFullName() {

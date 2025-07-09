@@ -1,6 +1,7 @@
 package com.company.company_service.companies.application.internal;
 
 import com.company.company_service.companies.domain.model.entities.Companies;
+import com.company.company_service.companies.domain.model.queries.ExistsByCompanyIdQuery;
 import com.company.company_service.companies.domain.model.queries.GetAllCompaniesQuery;
 import com.company.company_service.companies.domain.model.queries.GetCompanyByIdQuery;
 import com.company.company_service.companies.domain.services.CompaniesQueryService;
@@ -23,5 +24,10 @@ public class CompaniesQueryServiceImpl implements CompaniesQueryService {
     @Override
     public List<Companies> handle(GetAllCompaniesQuery query) {
         return companiesRepository.findAll();
+    }
+
+    @Override
+    public Boolean handle(ExistsByCompanyIdQuery query) {
+        return companiesRepository.existsById(query.companyId());
     }
 }

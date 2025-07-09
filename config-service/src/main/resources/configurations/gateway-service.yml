@@ -4,11 +4,11 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_URL}
-      #defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      #defaultZone: ${EUREKA_URL}
   instance:
-    hostname: gateway-service
-    #hostname: localhost
+    hostname: localhost
+    #hostname: gateway-service
 
 spring:
   application:
@@ -64,6 +64,16 @@ spring:
                 - Path=/api/v1/evidences/**
               filters:
                 - AuthenticationFilter
+            - id: contracts
+              uri: lb://transactions-service
+              predicates:
+                - Path=/api/v1/contracts/**
+              filters:
+                - AuthenticationFilter
+            - id: transactions-ws
+              uri: lb://transactions-service
+              predicates:
+                - Path=/ws/**
 
 authorization:
   jwt:
