@@ -11,6 +11,10 @@ import java.util.Set;
 
 @Entity
 public class User extends AuditableAbstractAggregateRoot<User> {
+    private String name;
+    private String lastName;
+    private String occupation;
+
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
@@ -34,13 +38,18 @@ public class User extends AuditableAbstractAggregateRoot<User> {
 
     public User() {}
 
-    public User(String email, String password, List<Role> roles, Boolean isActive, Employee employee) {
+    public User(
+            String email, String password, List<Role> roles, Boolean isActive,
+            Employee employee, String name, String lastName, String occupation) {
         this.email = email;
         this.password = password;
         this.roles = new HashSet<>();
         addRoles(roles);
         this.isActive = isActive;
         this.employee = employee;
+        this.name = name;
+        this.lastName = lastName;
+        this.occupation = occupation;
     }
 
     public void addRoles(List<Role> roles) {
@@ -91,5 +100,27 @@ public class User extends AuditableAbstractAggregateRoot<User> {
         this.roles = roles;
     }
 
+    public String getOccupation() {
+        return occupation;
+    }
 
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }

@@ -81,7 +81,10 @@ public class UserCommandServiceImpl implements UserCommandService {
                         hashingService.encode(command.password()),
                         storedRoles,
                         true,
-                        null))
+                        null,
+                        command.name(),
+                        command.lastName(),
+                        "TalentChainAdmin"))
                 .collect(Collectors.toList());
         userRepository.saveAll(userList);
         return userList;
@@ -102,7 +105,7 @@ public class UserCommandServiceImpl implements UserCommandService {
         return rolesList;
     }
 
-    private User createUser(String email, Employee employee) {
+    private User createUser(String email, Employee employee, String name, String lastName, String occupation) {
         userRepository.findByEmail(email).ifPresent(user->{
             throw new UserAlreadyExistsException("User already exists");
         });
@@ -117,7 +120,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         String password = employee.getIdentity().dni();
 
-        return new User(email, hashingService.encode(password), storedRoles,true,employee);
+        return new User(email, hashingService.encode(password), storedRoles,true,employee,name,lastName,occupation);
 
     }
 
@@ -139,7 +142,13 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         if (employee.isEmpty())return Optional.empty();
 
-        var user = this.createUser(command.workEmail(), employee.get());
+        var user = this.createUser(
+                command.workEmail(),
+                employee.get(),
+                employee.get().getFullName().name(),
+                employee.get().getFullName().lastName(),
+                employee.get().getOccupation()
+        );
         userRepository.save(user);
         return Optional.of(user);
     }
@@ -154,7 +163,14 @@ public class UserCommandServiceImpl implements UserCommandService {
         var employeeList = externalClientService.createEmployees(commands,companyId);
         if (employeeList.isEmpty())return Collections.emptyList();
 
-        List<User> usersList = employeeList.stream().map(employee -> this.createUser(employee.getContactInfo().workEmail(), employee)).collect(Collectors.toList());
+        List<User> usersList = employeeList.stream()
+                .map(employee -> this.createUser(
+                        employee.getContactInfo().workEmail(),
+                        employee,employee.getFullName().name(),
+                        employee.getFullName().lastName(),
+                        employee.getOccupation())
+                )
+                .collect(Collectors.toList());
         return userRepository.saveAll(usersList);
     }
 

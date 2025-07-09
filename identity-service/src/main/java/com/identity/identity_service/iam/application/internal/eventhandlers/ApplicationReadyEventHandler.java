@@ -38,11 +38,11 @@ public class ApplicationReadyEventHandler {
         roleCommandService.handle(seedRolesCommand);
         LOGGER.info("Roles Seeding Completed");
         var commands = Arrays.asList(
-                new CreateManagerCommand("gerardo@skillLedger.com",temporaryPassword,true,null),
-                new CreateManagerCommand("luis@skillLedger.com",temporaryPassword,true,null),
-                new CreateManagerCommand("jeremy@skillLedger.com",temporaryPassword,true,null),
-                new CreateManagerCommand("piero@skillLedger.com",temporaryPassword,true,null),
-                new CreateManagerCommand("brayan@skillLedger.com",temporaryPassword,true,null)
+                new CreateManagerCommand("gerardo@skillLedger.com",temporaryPassword,true,null,"Gerardo","Quilla"),
+                new CreateManagerCommand("luis@skillLedger.com",temporaryPassword,true,null,"Luis","Aquije"),
+                new CreateManagerCommand("jeremy@skillLedger.com",temporaryPassword,true,null,"Jeremy","Antonio"),
+                new CreateManagerCommand("piero@skillLedger.com",temporaryPassword,true,null,"Piero","Ticona"),
+                new CreateManagerCommand("brayan@skillLedger.com",temporaryPassword,true,null,"Brayan","Gamboa")
         );
         var managers = userCommandService.handleOnApplicationReady(commands, List.of(Roles.ADMIN));
         LOGGER.info("Admins Seeding Completed");
