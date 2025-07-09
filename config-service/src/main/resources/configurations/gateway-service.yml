@@ -70,6 +70,10 @@ spring:
                 - Path=/api/v1/contracts/**
               filters:
                 - AuthenticationFilter
+            - id: transactions-ws
+              uri: lb://transactions-service
+              predicates:
+                - Path=/ws/**
 
 authorization:
   jwt:

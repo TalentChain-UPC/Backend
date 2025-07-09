@@ -24,7 +24,7 @@ public class EvidenceBonusUtil {
             int bonus = 0;
             switch (evidenceType) {
                 case CERTIFICATE -> bonus = calculateBonusByCertificateEvidence(requirements, data);
-                case PROMOTION -> bonus = calculateBonusByPromotionEvidence(requirements, data);
+                //case PROMOTION -> bonus = calculateBonusByPromotionEvidence(requirements, data);
                 case PUNCTUALITY -> bonus = calculateBonusByPunctualityEvidence(requirements, data);
                 case SPECIALIZATION -> bonus=calculateBonusBySpecialityEvidence(requirements, data);
                 case STUDY_WORKSHOP -> bonus=calculateBonusByStudyWorkshopEvidence(requirements, data);
@@ -46,28 +46,78 @@ public class EvidenceBonusUtil {
             int min = rule.get("min").asInt();
             int max = rule.get("max").asInt();
             if(hoursNumber>= min && hoursNumber<= max){
-                //bonusValue = rule.get("recompensa").asInt();
                 return rule.get("recompensa").asInt();
             }
         }
         return 0;
     }
-    private int calculateBonusByPromotionEvidence(JsonNode requirements, JsonNode data){
+
+    private int calculateBonusByPunctualityEvidence(JsonNode requirements, JsonNode data) {
+        JsonNode bonusRules = requirements.get("bonificacionesPorMesesPuntualidad");
+        int months = data.get("mesesPuntualidad").asInt();
+
+        for (JsonNode rule : bonusRules) {
+            int min = rule.get("min").asInt();
+            int max = rule.get("max").asInt();
+            if (months >= min && months <= max) {
+                return rule.get("recompensa").asInt();
+            }
+        }
         return 0;
     }
-    private int calculateBonusByPunctualityEvidence(JsonNode requirements, JsonNode data){
+
+    private int calculateBonusBySpecialityEvidence(JsonNode requirements, JsonNode data) {
+        JsonNode bonusRules = requirements.get("bonificacionesPorNivel");
+        String level = data.get("nivel").asText();
+
+        for (JsonNode rule : bonusRules) {
+            String ruleLevel = rule.get("nivel").asText();
+            if (level.equalsIgnoreCase(ruleLevel)) {
+                return rule.get("recompensa").asInt();
+            }
+        }
         return 0;
     }
-    private int calculateBonusBySpecialityEvidence(JsonNode requirements, JsonNode data){
+
+    private int calculateBonusByStudyWorkshopEvidence(JsonNode requirements, JsonNode data) {
+        JsonNode bonusRules = requirements.get("bonificacionesPorHoras");
+        int hours = data.get("horas").asInt();
+
+        for (JsonNode rule : bonusRules) {
+            int min = rule.get("min").asInt();
+            int max = rule.get("max").asInt();
+            if (hours >= min && hours <= max) {
+                return rule.get("recompensa").asInt();
+            }
+        }
         return 0;
     }
-    private int calculateBonusByStudyWorkshopEvidence(JsonNode requirements, JsonNode data){
+
+    private int calculateBonusByJobTrainingEvidence(JsonNode requirements, JsonNode data) {
+        JsonNode bonusRules = requirements.get("bonificacionesPorSesiones");
+        int sessions = data.get("sesiones").asInt();
+
+        for (JsonNode rule : bonusRules) {
+            int min = rule.get("min").asInt();
+            int max = rule.get("max").asInt();
+            if (sessions >= min && sessions <= max) {
+                return rule.get("recompensa").asInt();
+            }
+        }
         return 0;
     }
-    private int calculateBonusByJobTrainingEvidence(JsonNode requirements, JsonNode data){
-        return 0;
-    }
-    private int calculateBonusByProactivityEvidence(JsonNode requirements, JsonNode data){
+
+    private int calculateBonusByProactivityEvidence(JsonNode requirements, JsonNode data) {
+        JsonNode bonusRules = requirements.get("bonificacionesPorImpacto");
+        int impacto = data.get("impactoEstimado").asInt();
+
+        for (JsonNode rule : bonusRules) {
+            int min = rule.get("min").asInt();
+            int max = rule.get("max").asInt();
+            if (impacto >= min && impacto <= max) {
+                return rule.get("recompensa").asInt();
+            }
+        }
         return 0;
     }
 }

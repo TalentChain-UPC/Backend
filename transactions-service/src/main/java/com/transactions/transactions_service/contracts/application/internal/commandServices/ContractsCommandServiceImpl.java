@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactions.transactions_service.contracts.application.internal.outboundservices.acl.ExternalCompanyService;
 import com.transactions.transactions_service.contracts.application.internal.outboundservices.acl.ExternalTransactionsContractsService;
-import com.transactions.transactions_service.contracts.application.internal.outboundservices.acl.Web3Utils;
+//import com.transactions.transactions_service.contracts.application.internal.outboundservices.acl.Web3Utils;
 import com.transactions.transactions_service.contracts.domain.model.aggregates.Contract;
 import com.transactions.transactions_service.contracts.domain.model.commands.CreateContractCommand;
 //import com.transactions.transactions_service.contracts.domain.model.valueObjects.ContractStatus;
@@ -26,7 +26,7 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
     private final ExternalCompanyService externalCompanyService;
     private final ExternalTransactionsContractsService externalTransactionsService;
 
-    private final Web3Utils web3Utils;
+    //private final Web3Utils web3Utils;
     private final LocalDateTimeUtil localDateTimeUtil;
     private final EvidenceBonusUtil evidenceBonusUtil;
 
@@ -34,13 +34,13 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
             ContractsRepository contractsRepository,
             ExternalCompanyService externalCompanyService,
             ExternalTransactionsContractsService externalTransactionsService,
-            Web3Utils web3Utils,
+            //Web3Utils web3Utils,
             LocalDateTimeUtil localDateTimeUtil,
             EvidenceBonusUtil evidenceBonusUtil) {
         this.contractsRepository = contractsRepository;
         this.externalCompanyService = externalCompanyService;
         this.externalTransactionsService = externalTransactionsService;
-        this.web3Utils = web3Utils;
+        //this.web3Utils = web3Utils;
         this.localDateTimeUtil = localDateTimeUtil;
         this.evidenceBonusUtil = evidenceBonusUtil;
     }
@@ -102,11 +102,11 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
         Integer virtualCoins = 0;
 
         //se le transfiere la cantidad por defecto del smart contract
-        BigInteger reward = web3Utils.getReward(smartContractAddress);
-        //BigInteger reward = new BigInteger("100");
+        //BigInteger reward = web3Utils.getReward(smartContractAddress);
+        BigInteger reward = new BigInteger("100");
         int value=0;
-        if(reward.compareTo(BigInteger.valueOf(Integer.MAX_VALUE))>=0 &&
-           reward.compareTo(BigInteger.valueOf(Integer.MIN_VALUE))<=0){
+        if(reward.compareTo(BigInteger.valueOf(Integer.MIN_VALUE))>=0 &&
+           reward.compareTo(BigInteger.valueOf(Integer.MAX_VALUE))<=0){
             value = reward.intValue();
         }else {
             return;
@@ -170,11 +170,12 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
         virtualCoins = virtualCoins + additionalCoins;
 
 
-        String trxHash = web3Utils.executeContract(
+        /*String trxHash = web3Utils.executeContract(
                 smartContractAddress,
                 command.companyId().toString(),
                 command.employeeId().toString()
-        );
+        );*/
+        String trxHash = "EC285HEBXN3I28C3NCNC3221032968OAMZF";
 
         // externalTransactionsService.transfer(command.employeeId(),command.evidenceType(),monedasVirtuales);
         externalTransactionsService.executeTransfer(
