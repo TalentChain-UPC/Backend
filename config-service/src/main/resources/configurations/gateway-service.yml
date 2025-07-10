@@ -74,6 +74,18 @@ spring:
               uri: lb://transactions-service
               predicates:
                 - Path=/ws/**
+            - id: transactions
+              uri: lb://transactions-service
+              predicates:
+                - Path=/api/v1/transactions/**
+              filters:
+                - AuthenticationFilter
+            - id: transactions
+              uri: lb://transactions-service
+              predicates:
+                - Path=/api/v1/virtual-accounts/**
+              filters:
+                - AuthenticationFilter
 
 authorization:
   jwt:

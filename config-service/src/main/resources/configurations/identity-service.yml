@@ -36,6 +36,8 @@ eureka:
 clients:
   company:
     base-url: ${COMPANY_SERVICE_URL:http://company-service}
+  transactions:
+    base-url: ${TRX_SERVICE_URL:http://transactions-service}
 
 managers-account:
   temporary-pswd: ${PSWD}
