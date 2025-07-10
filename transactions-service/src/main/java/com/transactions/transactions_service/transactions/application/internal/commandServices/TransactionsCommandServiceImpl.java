@@ -1,5 +1,6 @@
 package com.transactions.transactions_service.transactions.application.internal.commandServices;
 
+import com.transactions.transactions_service.transactions.application.internal.outboundservices.acl.ExternalVirtualAccountTransactionsService;
 import com.transactions.transactions_service.transactions.domain.model.aggregates.Transaction;
 import com.transactions.transactions_service.transactions.domain.model.commands.CreateTransactionCommand;
 import com.transactions.transactions_service.transactions.domain.services.TransactionsCommandService;
@@ -11,12 +12,15 @@ import org.springframework.stereotype.Service;
 public class TransactionsCommandServiceImpl implements TransactionsCommandService {
     private final TransactionsRepository transactionsRepository;
     private final SimpMessagingTemplate messagingTemplate;
+    private final ExternalVirtualAccountTransactionsService externalVirtualAccountTransactionsService;
 
     public TransactionsCommandServiceImpl(
             TransactionsRepository transactionsRepository,
-            SimpMessagingTemplate messagingTemplate) {
+            SimpMessagingTemplate messagingTemplate,
+            ExternalVirtualAccountTransactionsService externalVirtualAccountTransactionsService) {
         this.transactionsRepository = transactionsRepository;
         this.messagingTemplate = messagingTemplate;
+        this.externalVirtualAccountTransactionsService = externalVirtualAccountTransactionsService;
     }
 
     @Override
@@ -27,6 +31,9 @@ public class TransactionsCommandServiceImpl implements TransactionsCommandServic
 
         var transaction = new Transaction(command, description);
         transactionsRepository.save(transaction);
+
+        externalVirtualAccountTransactionsService
+                .updateVirtualAccountBalance(command.employeeId(), command.virtualCoins());
 
         String destination = "/topic/transactions/"+command.companyId();
         messagingTemplate.convertAndSend(destination, transaction);

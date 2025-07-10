@@ -26,13 +26,13 @@ public class VirtualAccountController {
     }
 
     @PostMapping
-    public ResponseEntity<VirtualAccountResource> createEmployeeVirtualAccount(
+    public ResponseEntity<Long> createEmployeeVirtualAccount(
             @RequestBody CreateVirtualAccountResource createVirtualAccountResource){
         var command = CreateVirtualAccountCommandFromResourceAssembler.toCommandFromResource(createVirtualAccountResource);
         var virtualAccount = virtualAccountCommandService.handle(command);
         if (virtualAccount.isEmpty())return ResponseEntity.badRequest().build();
         var resource = VirtualAccountResourceFromEntityAssembler.toResourceFromEntity(virtualAccount.get());
-        return new ResponseEntity<>(resource, HttpStatus.CREATED);
+        return new ResponseEntity<>(resource.id(), HttpStatus.CREATED);
     }
     @GetMapping("/employee/{id}")
     public ResponseEntity<VirtualAccountResource> getEmployeeVirtualAccount(@PathVariable Long id){

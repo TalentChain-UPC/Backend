@@ -36,4 +36,8 @@ public class VirtualAccount {
     public Integer getBalance() {
         return balance;
     }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
+    }
 }

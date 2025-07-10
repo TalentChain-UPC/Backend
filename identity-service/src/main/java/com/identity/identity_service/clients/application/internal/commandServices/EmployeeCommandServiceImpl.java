@@ -1,5 +1,6 @@
 package com.identity.identity_service.clients.application.internal.commandServices;
 
+import com.identity.identity_service.clients.application.internal.outboundservices.acl.ExternalTransactionsService;
 import com.identity.identity_service.clients.domain.model.aggregates.Employee;
 import com.identity.identity_service.clients.domain.model.commands.CreateEmployeeCommand;
 import com.identity.identity_service.clients.domain.model.valueObjects.Area;
@@ -10,14 +11,19 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class EmployeeCommandServiceImpl implements EmployeeCommandService {
     private final EmployeeRepository employeeRepository;
+    private final ExternalTransactionsService externalTransactionsService;
 
-    public EmployeeCommandServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeCommandServiceImpl(
+            EmployeeRepository employeeRepository,
+            ExternalTransactionsService externalTransactionsService) {
         this.employeeRepository = employeeRepository;
+        this.externalTransactionsService = externalTransactionsService;
     }
 
     private boolean areaValid(String cmdArea){
@@ -40,6 +46,11 @@ public class EmployeeCommandServiceImpl implements EmployeeCommandService {
         var area = Area.valueOf(command.area());
         var employee = new Employee(command,area);
         employeeRepository.save(employee);
+
+        String virtualAccountAddress = UUID.randomUUID().toString();
+
+        externalTransactionsService.createEmployeeVirtualAccount(employee.getId(),virtualAccountAddress);
+
         return Optional.of(employee);
     }
 
