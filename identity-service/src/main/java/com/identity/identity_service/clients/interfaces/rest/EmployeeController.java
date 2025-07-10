@@ -2,6 +2,7 @@ package com.identity.identity_service.clients.interfaces.rest;
 
 import com.identity.identity_service.clients.domain.model.queries.ExistsByEmployeeIdQuery;
 import com.identity.identity_service.clients.domain.model.queries.GetEmployeeByIdQuery;
+import com.identity.identity_service.clients.domain.model.queries.GetEmployeesByCompanyIdQuery;
 import com.identity.identity_service.clients.domain.services.EmployeeQueryService;
 import com.identity.identity_service.clients.interfaces.rest.resources.EmployeeResource;
 import com.identity.identity_service.clients.interfaces.rest.transform.EmployeeResourceFromEntityAssembler;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1/employees", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,5 +40,14 @@ public class EmployeeController {
         return ResponseEntity.ok(
                 employeeQueryService.handle(new ExistsByEmployeeIdQuery(id))
         );
+    }
+
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<List<EmployeeResource>> getEmployeesByCompanyId(@PathVariable Long companyId){
+        var employees = employeeQueryService.handle(new GetEmployeesByCompanyIdQuery(companyId));
+        var resources = employees.stream()
+                .map(EmployeeResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(resources);
     }
 }
