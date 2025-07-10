@@ -7,6 +7,7 @@ import com.labor_record.labor_record_service.evidences.interfaces.rest.resources
 public class CreateEvidenceCommandFromResourceAssembler {
     public static CreateEvidenceCommand toCommandFromResource(CreateEvidenceResource resource) {
         return new CreateEvidenceCommand(
+                resource.companyId(),
                 resource.employeeId(),
                 resource.type(),
                 resource.description(),

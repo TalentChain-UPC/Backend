@@ -9,10 +9,7 @@ import com.transactions.transactions_service.contracts.interfaces.rest.transform
 import com.transactions.transactions_service.contracts.interfaces.rest.transform.ValidateEvidenceWithContractCommandFromResourceAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 
 @RestController
@@ -42,5 +39,10 @@ public class ContractsController {
         contractsCommandService.handle(command);
         return ResponseEntity.ok(true);
     }
+
+    /*@GetMapping("/{employeeId}")
+    public ResponseEntity<?> getContractsByEmployeeId(@PathVariable Long employeeId){
+
+    }*/
 
 }

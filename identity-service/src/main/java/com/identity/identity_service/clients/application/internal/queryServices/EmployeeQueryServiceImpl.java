@@ -3,10 +3,12 @@ package com.identity.identity_service.clients.application.internal.queryServices
 import com.identity.identity_service.clients.domain.model.aggregates.Employee;
 import com.identity.identity_service.clients.domain.model.queries.ExistsByEmployeeIdQuery;
 import com.identity.identity_service.clients.domain.model.queries.GetEmployeeByIdQuery;
+import com.identity.identity_service.clients.domain.model.queries.GetEmployeesByCompanyIdQuery;
 import com.identity.identity_service.clients.domain.services.EmployeeQueryService;
 import com.identity.identity_service.clients.infrastructure.persistence.jpa.repositories.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -68,5 +70,10 @@ public class EmployeeQueryServiceImpl implements EmployeeQueryService {
     @Override
     public Boolean handle(ExistsByEmployeeIdQuery query) {
         return employeeRepository.existsById(query.employeeId());
+    }
+
+    @Override
+    public List<Employee> handle(GetEmployeesByCompanyIdQuery query) {
+        return employeeRepository.findAllByCompanyId(query.companyId());
     }
 }
