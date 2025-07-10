@@ -4,6 +4,9 @@ import com.transactions.transactions_service.transactions.domain.model.aggregate
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TransactionsRepository extends JpaRepository<Transaction, Long> {
+    List<Transaction> findAllByEmployeeId(Long employeeId);
 }
