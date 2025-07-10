@@ -4,6 +4,7 @@ public record CreateEvidenceResource(
         String type,
         String description,
         Long employeeId,
+        Long companyId,
         String data,
         String url,
         String name,
@@ -14,6 +15,7 @@ public record CreateEvidenceResource(
             String type,
             String description,
             Long employeeId,
+            Long companyId,
             String data,
             String url,
             String name,
@@ -23,6 +25,7 @@ public record CreateEvidenceResource(
         this.type = type;
         this.description = description;
         this.employeeId = employeeId;
+        this.companyId = companyId;
         this.data = data;
         this.url = (url != null) ? url : "";
         this.name = (name != null) ? name : "";
