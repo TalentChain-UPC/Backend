@@ -27,7 +27,7 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     @JoinColumn(name = "employee_id",unique = true)
     private Employee employee;
 
-    // private Long companyId
+    private Long companyId;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -40,7 +40,7 @@ public class User extends AuditableAbstractAggregateRoot<User> {
 
     public User(
             String email, String password, List<Role> roles, Boolean isActive,
-            Employee employee, String name, String lastName, String occupation) {
+            Employee employee, String name, String lastName, String occupation, Long companyId) {
         this.email = email;
         this.password = password;
         this.roles = new HashSet<>();
@@ -50,6 +50,7 @@ public class User extends AuditableAbstractAggregateRoot<User> {
         this.name = name;
         this.lastName = lastName;
         this.occupation = occupation;
+        this.companyId = companyId;
     }
 
     public void addRoles(List<Role> roles) {

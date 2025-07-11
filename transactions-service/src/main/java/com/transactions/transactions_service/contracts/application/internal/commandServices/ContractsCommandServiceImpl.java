@@ -47,13 +47,20 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
 
     private String getContractByEvidenceType(EvidenceType evidenceType) {
         return switch (evidenceType){
-            case CERTIFICATE -> "0x2943b2d3257235d808f25b69a41bda6450bd863b";
-            case PROMOTION -> "0xf55df20dc6369ab9799335412a98aa4918e7192b";
-            case PUNCTUALITY -> "0x22b047fc51bebcc0223f53ae82ceb4df029a32de";
-            case SPECIALIZATION -> "0x66f394759474a56fb1171cb9cd4cfa6ee6616826";
-            case STUDY_WORKSHOP -> "0x56b9cefbc4ab053a369403b637c91a3e56c3b269";
-            case JOB_TRAINING -> "0xc917402d3b1ceb60b6bf216eb19ab774194416c7";
-            case PROACTIVITY -> "0x113feaab0c7f7df70bbf51a69b29fb49ab704602";
+            //case CERTIFICATE -> "0x2943b2d3257235d808f25b69a41bda6450bd863b";
+            case CERTIFICATE -> "";
+            //case PROMOTION -> "0xf55df20dc6369ab9799335412a98aa4918e7192b";
+            case PROMOTION -> "";
+            //case PUNCTUALITY -> "0x22b047fc51bebcc0223f53ae82ceb4df029a32de";
+            case PUNCTUALITY -> "";
+            //case SPECIALIZATION -> "0x66f394759474a56fb1171cb9cd4cfa6ee6616826";
+            case SPECIALIZATION -> "";
+            //case STUDY_WORKSHOP -> "0x56b9cefbc4ab053a369403b637c91a3e56c3b269";
+            case STUDY_WORKSHOP -> "";
+            //case JOB_TRAINING -> "0xc917402d3b1ceb60b6bf216eb19ab774194416c7";
+            case JOB_TRAINING -> "";
+            //case PROACTIVITY -> "0x113feaab0c7f7df70bbf51a69b29fb49ab704602";
+            case PROACTIVITY -> "";
             default -> "";
         };
     }
@@ -102,8 +109,8 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
         Integer virtualCoins = 0;
 
         //se le transfiere la cantidad por defecto del smart contract
-        BigInteger reward = web3Utils.getReward(smartContractAddress);
-        //BigInteger reward = new BigInteger("100");
+        //BigInteger reward = web3Utils.getReward(smartContractAddress);
+        BigInteger reward = new BigInteger("100");
         int value=0;
         if(reward.compareTo(BigInteger.valueOf(Integer.MIN_VALUE))>=0 &&
            reward.compareTo(BigInteger.valueOf(Integer.MAX_VALUE))<=0){
@@ -170,12 +177,12 @@ class ContractsCommandServiceImpl implements ContractsCommandService {
         virtualCoins = virtualCoins + additionalCoins;
 
 
-        String trxHash = web3Utils.executeContract(
+        /*String trxHash = web3Utils.executeContract(
                 smartContractAddress,
                 command.companyId().toString(),
                 command.employeeId().toString()
-        );
-        //String trxHash = "EC285HEBXN3I28C3NCNC3221032968OAMZF";
+        );*/
+        String trxHash = "EC285HEBXN3I28C3NCNC3221032968OAMZF";
 
         // externalTransactionsService.transfer(command.employeeId(),command.evidenceType(),monedasVirtuales);
         externalTransactionsService.executeTransfer(
