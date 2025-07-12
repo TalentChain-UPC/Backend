@@ -2,6 +2,8 @@ server:
   port: 8115
 
 spring:
+  application:
+    name: rewards-service
   datasource:
     url: ${DB_URL_REWARDS_SERVICE}
     username: ${DB_USERNAME_REWARDS_SERVICE}
@@ -18,9 +20,13 @@ spring:
 
 eureka:
   instance:
+    hostname: localhost
+    #hostname: rewards-service
     #hostname: localhost
-    hostname: rewards-service
+    #hostname: rewards-service
   client:
     service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      #defaultZone: ${EUREKA_URL}
       #defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
-      defaultZone: ${EUREKA_URL}
+      #defaultZone: ${EUREKA_URL}
