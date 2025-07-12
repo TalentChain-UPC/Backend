@@ -2,15 +2,25 @@ server:
   port: 8115
 
 spring:
-  application:
-    name: rewards-service
+  datasource:
+    url: ${DB_URL_REWARDS_SERVICE}
+    username: ${DB_USERNAME_REWARDS_SERVICE}
+    password: ${DB_PASSWORD_REWARDS_SERVICE}
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 eureka:
   instance:
-    hostname: localhost
-    #hostname: rewards-service
+    #hostname: localhost
+    hostname: rewards-service
   client:
     service-url:
-      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
-      #defaultZone: ${EUREKA_URL}
+      #defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_URL}
