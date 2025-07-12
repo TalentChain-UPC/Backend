@@ -53,6 +53,10 @@ public class User extends AuditableAbstractAggregateRoot<User> {
         this.companyId = companyId;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
     public void addRoles(List<Role> roles) {
         this.roles.addAll(roles);
     }
