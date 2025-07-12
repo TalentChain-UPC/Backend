@@ -84,7 +84,8 @@ public class UserCommandServiceImpl implements UserCommandService {
                         null,
                         command.name(),
                         command.lastName(),
-                        "TalentChainAdmin"))
+                        "TalentChainAdmin",
+                        null))
                 .collect(Collectors.toList());
         userRepository.saveAll(userList);
         return userList;
@@ -105,7 +106,10 @@ public class UserCommandServiceImpl implements UserCommandService {
         return rolesList;
     }
 
-    private User createUser(String email, Employee employee, String name, String lastName, String occupation) {
+    private User createUser(
+            String email, Employee employee, String name,
+            String lastName, String occupation, Long companyId) {
+
         userRepository.findByEmail(email).ifPresent(user->{
             throw new UserAlreadyExistsException("User already exists");
         });
@@ -120,7 +124,9 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         String password = employee.getIdentity().dni();
 
-        return new User(email, hashingService.encode(password), storedRoles,true,employee,name,lastName,occupation);
+        return new User(
+                email, hashingService.encode(password), storedRoles,
+                true,employee,name,lastName,occupation,companyId);
 
     }
 
@@ -147,7 +153,8 @@ public class UserCommandServiceImpl implements UserCommandService {
                 employee.get(),
                 employee.get().getFullName().name(),
                 employee.get().getFullName().lastName(),
-                employee.get().getOccupation()
+                employee.get().getOccupation(),
+                companyId
         );
         userRepository.save(user);
         return Optional.of(user);
@@ -168,7 +175,8 @@ public class UserCommandServiceImpl implements UserCommandService {
                         employee.getContactInfo().workEmail(),
                         employee,employee.getFullName().name(),
                         employee.getFullName().lastName(),
-                        employee.getOccupation())
+                        employee.getOccupation(),
+                        companyId)
                 )
                 .collect(Collectors.toList());
         return userRepository.saveAll(usersList);
