@@ -12,11 +12,12 @@ import com.rewards.rewards_service.rewards.interfaces.rest.transform.RewardsReso
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/rewards")
+@RequestMapping(value = "/api/v1/rewards", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RewardsController {
     private final RewardsCommandService rewardsCommandService;
     private final RewardsQueryService rewardsQueryService;
