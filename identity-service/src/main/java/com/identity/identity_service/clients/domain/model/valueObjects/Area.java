@@ -1,0 +1,21 @@
+package com.identity.identity_service.clients.domain.model.valueObjects;
+
+public enum Area {
+    GENERAL_MANAGEMENT,
+    ADMINISTRATION,
+    HUMAN_RESOURCES,
+    FINANCE,
+    LOGISTICS,
+    SALES,
+    MARKETING,
+    INFORMATION_TECHNOLOGY,
+    OPERATIONS,
+    QUALITY_ASSURANCE,
+    LEGAL,
+    AUDIT,
+    MAINTENANCE,
+    OCCUPATIONAL_HEALTH_AND_SAFETY,
+    CUSTOMER_SERVICE,
+    PLANNING,
+    INNOVATION
+}

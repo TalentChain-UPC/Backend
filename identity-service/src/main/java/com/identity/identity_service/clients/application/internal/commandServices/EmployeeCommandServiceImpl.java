@@ -1,0 +1,80 @@
+package com.identity.identity_service.clients.application.internal.commandServices;
+
+import com.identity.identity_service.clients.application.internal.outboundservices.acl.ExternalTransactionsService;
+import com.identity.identity_service.clients.domain.model.aggregates.Employee;
+import com.identity.identity_service.clients.domain.model.commands.CreateEmployeeCommand;
+import com.identity.identity_service.clients.domain.model.valueObjects.Area;
+import com.identity.identity_service.clients.domain.services.EmployeeCommandService;
+import com.identity.identity_service.clients.infrastructure.persistence.jpa.repositories.EmployeeRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+public class EmployeeCommandServiceImpl implements EmployeeCommandService {
+    private final EmployeeRepository employeeRepository;
+    private final ExternalTransactionsService externalTransactionsService;
+
+    public EmployeeCommandServiceImpl(
+            EmployeeRepository employeeRepository,
+            ExternalTransactionsService externalTransactionsService) {
+        this.employeeRepository = employeeRepository;
+        this.externalTransactionsService = externalTransactionsService;
+    }
+
+    private boolean areaValid(String cmdArea){
+        Area area;
+        try {
+            area = Area.valueOf(cmdArea);
+        }catch (IllegalArgumentException e){
+            //LOG
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public Optional<Employee> handle(CreateEmployeeCommand command) {
+        if(employeeRepository.findByContactInfo_WorkEmail(command.workEmail()).isPresent()){
+            return Optional.empty();
+        }
+        if (!areaValid(command.area()))return Optional.empty();
+        var area = Area.valueOf(command.area());
+        var employee = new Employee(command,area);
+        employeeRepository.save(employee);
+
+        String virtualAccountAddress = UUID.randomUUID().toString();
+
+        externalTransactionsService.createEmployeeVirtualAccount(employee.getId(),virtualAccountAddress);
+
+        return Optional.of(employee);
+    }
+
+    @Override
+    public List<Employee> handle(List<CreateEmployeeCommand> commands) {
+
+        /*
+        Falta validar si el workEmail ya existe
+        Crear los emails nuevos
+        Y mandar LOGS de aquellos que estan repetidos
+        para tomar acciones
+        */
+
+        var allValid = commands.stream().allMatch(cmd -> areaValid(cmd.area()));
+
+        if (!allValid)return Collections.emptyList();
+
+        List<Employee> employeeList = commands.stream()
+                .map(command -> {
+                    var area = Area.valueOf(command.area());
+                    return new Employee(command,area);
+                })
+                .collect(Collectors.toList());
+        employeeRepository.saveAll(employeeList);
+        return employeeList;
+    }
+}
