@@ -1,5 +1,15 @@
 server:
   port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      #defaultZone: ${EUREKA_URL}
+  instance:
+    hostname: localhost
+    #hostname: gateway-service
+
 spring:
   application:
     name: gateway-service
@@ -7,22 +17,90 @@ spring:
     gateway:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedHeaders: "*"
-            allowedMethods:
-              - GET
-              - POST
-              - DELETE
-              - PUT
-              - OPTIONS
-              - PATCH
-      discovery:
-        locator:
-          enabled: true
-      routes:
-        - id:
-          uri:
-          predicates:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          globalcors:
+            corsConfigurations:
+              '[/**]':
+                allowedOrigins: "*"
+                allowedHeaders: "*"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - DELETE
+                  - PUT
+                  - OPTIONS
+                  - PATCH
+          routes:
+            - id: identity
+              uri: lb://identity-service
+              predicates:
+                - Path=/api/v1/auth/**
+            - id: users
+              uri: lb://identity-service
+              predicates:
+                - Path=/api/v1/users/**
+              filters:
+                - AuthenticationFilter
+            - id: employees
+              uri: lb://identity-service
+              predicates:
+                - Path=/api/v1/employees/**
+              filters:
+                - AuthenticationFilter
+            - id: companies
+              uri: lb://company-service
+              predicates:
+                - Path=/api/v1/companies/**
+              filters:
+                - AuthenticationFilter                
+            - id: evidences
+              uri: lb://labor-record-service
+              predicates:
+                - Path=/api/v1/evidences/**
+              filters:
+                - AuthenticationFilter
+            - id: contracts
+              uri: lb://transactions-service
+              predicates:
+                - Path=/api/v1/contracts/**
+              filters:
+                - AuthenticationFilter
+            - id: transactions-ws
+              uri: lb://transactions-service
+              predicates:
+                - Path=/ws/**
+            - id: transactions
+              uri: lb://transactions-service
+              predicates:
+                - Path=/api/v1/transactions/**
+              filters:
+                - AuthenticationFilter
+            - id: transactions
+              uri: lb://transactions-service
+              predicates:
+                - Path=/api/v1/virtual-accounts/**
+              filters:
+                - AuthenticationFilter
+
+authorization:
+  jwt:
+    secret: ${AUTHORIZATION_JWT_SECRET}
+    expiration:
+      days: ${AUTHORIZATION_JWT_EXP}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      access:
+        enabled: true
